@@ -94,8 +94,26 @@ html, body {
 }
 
 /* =========================================================================
-   1. TOP JET-BLACK STREAMING MARQUEE RIBBON
+   1. TOP TRADINGVIEW TAPE & JET-BLACK STREAMING MARQUEE RIBBON
    ========================================================================= */
+.tv-official-tape-wrap {
+  background: #000000;
+  border-bottom: 1px solid #27272a;
+}
+
+.wb-top-split-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 20px;
+  margin-bottom: 26px;
+}
+
+@media (max-width: 1180px) {
+  .wb-top-split-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .live-marquee-bar {
   display: flex;
   align-items: center;

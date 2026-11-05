@@ -3,24 +3,57 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KPOINT COF — Modern White &amp; Black Macro News Terminal (CFDs • Options • Futures)</title>
-  <meta name="description" content="Next-Gen White & Black Macro Trading Terminal. Live CPI, NFP, FOMC & Earnings pulled direct from Yahoo Finance & ForexFactory (No API Keys). Toggleable CFDs, Options & Futures Desks with 100% News-Driven BUY, SELL, or HOLD Signals." />
+  <title>KPOINT COF — Live TradingView Prices + Macro News Terminal (CFDs • Options • Futures)</title>
+  <meta name="description" content="Next-Gen White & Black Macro Trading Terminal powered by real-time TradingView live prices (scanner.tradingview.com + TradingView Widgets), Yahoo Finance, and ForexFactory (No API Keys). Separate toggleable sections for CFDs, Options & Futures." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 </head>
 <body class="wb-light">
 
-  <!-- TOP JET-BLACK STREAMING RIBBON -->
+  <!-- OFFICIAL LIVE TRADINGVIEW TICKER TAPE EMBED -->
+  <div class="tv-official-tape-wrap">
+    <div class="tradingview-widget-container">
+      <div class="tradingview-widget-container__widget"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+      {
+        "symbols": [
+          { "proName": "OANDA:XAUUSD", "title": "XAUUSD (Gold CFD)" },
+          { "proName": "BITSTAMP:BTCUSD", "title": "BTCUSD (Bitcoin CFD)" },
+          { "proName": "FX:USDJPY", "title": "USDJPY (FX CFD)" },
+          { "proName": "FX:EURUSD", "title": "EURUSD (FX CFD)" },
+          { "proName": "NASDAQ:META", "title": "META" },
+          { "proName": "NASDAQ:NVDA", "title": "NVDA" },
+          { "proName": "AMEX:SPY", "title": "SPY" },
+          { "proName": "NASDAQ:QQQ", "title": "QQQ" },
+          { "proName": "NASDAQ:MSFT", "title": "MSFT" },
+          { "proName": "NASDAQ:AAPL", "title": "AAPL" },
+          { "proName": "CME_MINI:ES1!", "title": "ES1! (S&P Futures)" },
+          { "proName": "CME_MINI:NQ1!", "title": "NQ1! (Nasdaq Futures)" },
+          { "proName": "COMEX:GC1!", "title": "GC1! (Gold Futures)" },
+          { "proName": "NYMEX:CL1!", "title": "CL1! (Crude Futures)" }
+        ],
+        "showSymbolLogo": true,
+        "isTransparent": false,
+        "displayMode": "adaptive",
+        "colorTheme": "dark",
+        "locale": "en"
+      }
+      </script>
+    </div>
+  </div>
+
+  <!-- TOP JET-BLACK STREAMING RIBBON (POWERED BY LIVE TRADINGVIEW SCANNER API) -->
   <div class="live-marquee-bar">
     <div class="marquee-badge">
       <span class="live-dot"></span>
-      <span>LIVE ZERO-KEY STREAM</span>
+      <span>TRADINGVIEW LIVE API // 4s REAL-TIME POLL</span>
     </div>
     <div class="marquee-viewport">
       <div class="marquee-track" id="live-ticker-ribbon">
-        <!-- Populated dynamically by app.js -->
+        <!-- Populated dynamically by app.js from scanner.tradingview.com -->
       </div>
     </div>
     <div class="marquee-clock" id="utc-clock-display">00:00:00 UTC</div>
@@ -37,11 +70,11 @@
         <div class="wb-brand-copy">
           <div class="wb-title-line">
             <h1>KPOINT COF</h1>
-            <span class="wb-pill-black">2026 MACRO ENGINE</span>
+            <span class="wb-pill-black">TRADINGVIEW LIVE PRICES</span>
             <span class="wb-pill-outline">NO API KEYS</span>
           </div>
           <p class="wb-subtitle">
-            Direct <strong>Yahoo Finance</strong> &amp; <strong>ForexFactory</strong> (CPI • NFP • FOMC • Earnings) → Pure News-Driven <strong>BUY / SELL / HOLD</strong>
+            100% Real-Time Prices from <strong>TradingView</strong> + Live <strong>ForexFactory</strong> (CPI • NFP • FOMC) &amp; <strong>Yahoo Finance</strong> News → <strong>BUY / SELL / HOLD</strong>
           </p>
         </div>
       </div>
@@ -51,11 +84,11 @@
         <div class="wb-status-cluster">
           <span class="wb-status-chip">
             <span class="dot-green"></span>
-            ForexFactory: <strong>DIRECT</strong>
+            TradingView Feed: <strong id="last-price-sync-label">CONNECTING...</strong>
           </span>
           <span class="wb-status-chip">
             <span class="dot-green"></span>
-            Yahoo v8: <strong id="last-price-sync-label">LIVE</strong>
+            ForexFactory / Yahoo: <strong>LIVE</strong>
           </span>
         </div>
 
@@ -65,7 +98,7 @@
 
         <button class="wb-btn-black" id="sync-all-btn" onclick="triggerLiveMacroSync()">
           <span id="sync-spinner-icon">↻</span>
-          <span>Sync Live Feeds</span>
+          <span>Refresh TradingView Live Now</span>
         </button>
       </div>
     </div>
@@ -76,7 +109,7 @@
     <div class="wb-desk-control-bar">
       <div class="wb-desk-control-inner">
 
-        <!-- 1. Segmented Desk Selector (Instant 1-Click Focus or All Desks) -->
+        <!-- 1. Segmented Desk Selector -->
         <div class="wb-segmented-group" role="tablist" aria-label="Trading Desks">
           <button class="wb-seg-btn active" data-desk="ALL" onclick="selectDeskMode('ALL', this)">
             <span class="seg-dot"></span>
@@ -101,7 +134,7 @@
 
         <!-- 2. Individual ON/OFF Section Toggle Switches -->
         <div class="wb-toggle-switches-bar" aria-label="Toggle Individual Sections On or Off">
-          <span class="toggle-bar-label">TOGGLE SECTIONS:</span>
+          <span class="toggle-bar-label">TOGGLE SECTIONS ON/OFF:</span>
 
           <label class="wb-switch-pill" id="pill-toggle-cfds">
             <input type="checkbox" id="chk-section-cfds" checked onchange="toggleSectionVisibility('cfds', this.checked)" />
@@ -173,101 +206,124 @@
         <div class="mini-foot">Liquidity Tailwind → <strong class="txt-buy">BUY</strong> BTCUSD &amp; NQ=F</div>
       </div>
 
-      <div class="wb-bento-mini mini-highlight" onclick="selectDeskMode('CFDS')">
+      <div class="wb-bento-mini mini-highlight" onclick="loadTradingViewChart('OANDA:XAUUSD', 'XAUUSD — Gold Spot CFD')">
         <div class="mini-top">
-          <span class="mini-tag">XAUUSD • GOLD CFD</span>
+          <span class="mini-tag">OANDA:XAUUSD • GOLD CFD</span>
           <span class="wb-adv-pill adv-buy">▲ BUY</span>
         </div>
         <div class="mini-value-row">
-          <span class="mini-big" id="strip-price-XAUUSD" data-live-price="XAUUSD">$2,665.40</span>
-          <span class="mini-delta delta-up" id="strip-delta-XAUUSD" data-live-chg="XAUUSD">+0.84%</span>
+          <span class="mini-big" id="strip-price-XAUUSD" data-live-price="XAUUSD">$4,110.69</span>
+          <span class="mini-delta delta-up" id="strip-delta-XAUUSD" data-live-chg="XAUUSD">+1.24%</span>
         </div>
-        <div class="mini-foot">CB Bullion Buying + CPI Hedge</div>
+        <div class="mini-foot">Click for Live TradingView Chart</div>
       </div>
 
-      <div class="wb-bento-mini mini-highlight" onclick="selectDeskMode('CFDS')">
+      <div class="wb-bento-mini mini-highlight" onclick="loadTradingViewChart('BITSTAMP:BTCUSD', 'BTCUSD — Bitcoin Spot CFD')">
         <div class="mini-top">
-          <span class="mini-tag">BTCUSD • BITCOIN CFD</span>
+          <span class="mini-tag">BITSTAMP:BTCUSD • CFD</span>
           <span class="wb-adv-pill adv-buy">▲ BUY</span>
         </div>
         <div class="mini-value-row">
-          <span class="mini-big" id="strip-price-BTCUSD" data-live-price="BTCUSD">$98,420.00</span>
-          <span class="mini-delta delta-up" id="strip-delta-BTCUSD" data-live-chg="BTCUSD">+2.65%</span>
+          <span class="mini-big" id="strip-price-BTCUSD" data-live-price="BTCUSD">$80,466.65</span>
+          <span class="mini-delta delta-up" id="strip-delta-BTCUSD" data-live-chg="BTCUSD">+0.03%</span>
         </div>
-        <div class="mini-foot">$1.4B Weekly Institutional ETF Inflow</div>
+        <div class="mini-foot">Click for Live TradingView Chart</div>
       </div>
 
-      <div class="wb-bento-mini mini-highlight" onclick="selectDeskMode('CFDS')">
+      <div class="wb-bento-mini mini-highlight" onclick="loadTradingViewChart('FX:USDJPY', 'USDJPY — FX Spot CFD')">
         <div class="mini-top">
-          <span class="mini-tag">USDJPY • FX CFD</span>
+          <span class="mini-tag">FX:USDJPY • FX CFD</span>
           <span class="wb-adv-pill adv-buy">▲ BUY</span>
         </div>
         <div class="mini-value-row">
-          <span class="mini-big" id="strip-price-USDJPY" data-live-price="USDJPY">¥153.850</span>
-          <span class="mini-delta delta-up" id="strip-delta-USDJPY" data-live-chg="USDJPY">+0.42%</span>
+          <span class="mini-big" id="strip-price-USDJPY" data-live-price="USDJPY">¥158.110</span>
+          <span class="mini-delta delta-down" id="strip-delta-USDJPY" data-live-chg="USDJPY">-0.19%</span>
         </div>
-        <div class="mini-foot">US NFP Beat vs Dovish BoJ Rate</div>
+        <div class="mini-foot">Click for Live TradingView Chart</div>
       </div>
     </section>
 
     <!-- ===================================================================
-         INTERACTIVE FINANCIAL NEWS → BUY / SELL / HOLD SIGNAL SIMULATOR
+         LIVE INTERACTIVE TRADINGVIEW REAL-TIME CHART + NEWS SIMULATOR SPLIT
          =================================================================== -->
-    <section class="wb-section-card wb-analyzer-section">
-      <div class="wb-section-head">
-        <div>
-          <div class="wb-eyebrow">
-            <span class="eyebrow-dot"></span>
-            <span>SOLELY FINANCIAL NEWS-DRIVEN DECISION ENGINE</span>
+    <div class="wb-top-split-grid">
+
+      <!-- LEFT: LIVE TRADINGVIEW ADVANCED REAL-TIME CHART -->
+      <section class="wb-section-card wb-tv-chart-card">
+        <div class="wb-section-head" style="padding-bottom:12px; margin-bottom:12px;">
+          <div>
+            <div class="wb-eyebrow">
+              <span class="wb-index-badge">TV</span>
+              <span>REAL-TIME TRADINGVIEW TERMINAL FEED</span>
+            </div>
+            <h2 class="wb-section-title" id="tv-chart-active-title">OANDA:XAUUSD — Gold Spot CFD Live Chart</h2>
           </div>
-          <h2 class="wb-section-title">Live Financial Report → Instant BUY / SELL / HOLD Signal</h2>
-          <p class="wb-section-desc">
-            Every recommendation on this terminal is computed <strong>100% from financial &amp; macroeconomic news reports</strong> (e.g. if <strong>META</strong> earnings beat expectations → advise <strong>BUY</strong>; if <strong>INTC</strong> slashes guidance → advise <strong>SELL</strong>). Type or click any report below to test the engine live.
-          </p>
+          <div class="wb-sample-pills" style="margin-bottom:0;">
+            <button class="wb-chip" onclick="loadTradingViewChart('OANDA:XAUUSD', 'XAUUSD — Gold Spot CFD')">XAUUSD</button>
+            <button class="wb-chip" onclick="loadTradingViewChart('BITSTAMP:BTCUSD', 'BTCUSD — Bitcoin CFD')">BTCUSD</button>
+            <button class="wb-chip" onclick="loadTradingViewChart('FX:USDJPY', 'USDJPY — FX CFD')">USDJPY</button>
+            <button class="wb-chip" onclick="loadTradingViewChart('NASDAQ:META', 'META — Options Underlying')">META</button>
+            <button class="wb-chip" onclick="loadTradingViewChart('NASDAQ:NVDA', 'NVDA — Options Underlying')">NVDA</button>
+            <button class="wb-chip" onclick="loadTradingViewChart('CME_MINI:ES1!', 'ES1! — S&P 500 Futures')">ES1!</button>
+          </div>
         </div>
-      </div>
+        <div id="tv_live_chart_container" style="height: 360px; width: 100%; border-radius: 12px; overflow: hidden;"></div>
+      </section>
 
-      <div class="wb-analyzer-controls">
-        <div class="wb-input-bar">
-          <input
-            type="text"
-            id="custom-news-input"
-            class="wb-news-input"
-            value="META reports strong quarterly earnings beat; EPS up 35% YoY and raises full-year AI advertising revenue guidance"
-            placeholder="Paste or type any financial news headline (META earnings, US CPI print, NFP jobs report, Fed rate decision)..."
-          />
-          <button class="wb-btn-black wb-btn-large" onclick="evaluateCustomNewsHeadline()">
-            <span>⚡ Compute BUY / SELL / HOLD</span>
-          </button>
-        </div>
-
-        <div class="wb-sample-pills">
-          <span class="sample-label">TRY LIVE REPORTS:</span>
-          <button class="wb-chip" onclick="loadSampleNews('META reports strong quarterly earnings beat; EPS up 35% YoY and raises full-year AI advertising revenue guidance')">
-            META Earnings Beat (+35% EPS)
-          </button>
-          <button class="wb-chip" onclick="loadSampleNews('ForexFactory Alert: US CPI YoY cools to 2.4% below forecast; Federal Reserve rate cut odds surge')">
-            Cool US CPI Print (ForexFactory)
-          </button>
-          <button class="wb-chip" onclick="loadSampleNews('ForexFactory Alert: US Non-Farm Payrolls (NFP) jumps to 275K vs 195K expected; US yields climb')">
-            Hot NFP Jobs Beat (USDJPY Catalyst)
-          </button>
-          <button class="wb-chip" onclick="loadSampleNews('NVDA announces Blackwell B200 AI GPU supply sold out for 12 months on $220B hyperscaler capex')">
-            NVDA Blackwell Sold Out
-          </button>
-          <button class="wb-chip" onclick="loadSampleNews('Intel (INTC) misses quarterly revenue estimates and takes $16.6B restructuring charge')">
-            INTC Earnings Miss (Bearish)
-          </button>
-          <button class="wb-chip" onclick="loadSampleNews('AAPL iPhone revenue matches consensus while Services hits record; market awaits next AI catalyst')">
-            AAPL In-Line Report (Hold)
-          </button>
+      <!-- RIGHT: SOLELY FINANCIAL NEWS-DRIVEN BUY / SELL / HOLD SIMULATOR -->
+      <section class="wb-section-card wb-analyzer-section" style="margin-bottom:0;">
+        <div class="wb-section-head" style="padding-bottom:12px; margin-bottom:14px;">
+          <div>
+            <div class="wb-eyebrow">
+              <span class="eyebrow-dot"></span>
+              <span>SOLELY FINANCIAL NEWS-DRIVEN DECISION ENGINE</span>
+            </div>
+            <h2 class="wb-section-title">Financial News Report → BUY / SELL / HOLD</h2>
+            <p class="wb-section-desc">
+              Advises <strong>BUY</strong>, <strong>SELL</strong>, or <strong>HOLD</strong> strictly from financial reports (e.g. if <strong>META</strong> earnings are good → advise <strong>BUY</strong>).
+            </p>
+          </div>
         </div>
 
-        <div id="analyzer-result-box" class="wb-analyzer-output">
-          <!-- Populated dynamically by app.js -->
+        <div class="wb-analyzer-controls">
+          <div class="wb-input-bar">
+            <input
+              type="text"
+              id="custom-news-input"
+              class="wb-news-input"
+              value="META reports strong quarterly earnings beat; EPS up 35% YoY and raises full-year AI advertising revenue guidance"
+              placeholder="Paste or type any financial news report (META earnings, CPI, NFP)..."
+            />
+            <button class="wb-btn-black" onclick="evaluateCustomNewsHeadline()">
+              <span>⚡ Advise</span>
+            </button>
+          </div>
+
+          <div class="wb-sample-pills">
+            <button class="wb-chip" onclick="loadSampleNews('META reports strong quarterly earnings beat; EPS up 35% YoY and raises full-year AI advertising revenue guidance')">
+              META Earnings Beat
+            </button>
+            <button class="wb-chip" onclick="loadSampleNews('ForexFactory Alert: US CPI YoY cools to 2.4% below forecast; Federal Reserve rate cut odds surge')">
+              Cool US CPI Print
+            </button>
+            <button class="wb-chip" onclick="loadSampleNews('ForexFactory Alert: US Non-Farm Payrolls (NFP) jumps to 275K vs 195K expected; US yields climb')">
+              Hot NFP Jobs Beat
+            </button>
+            <button class="wb-chip" onclick="loadSampleNews('Intel (INTC) misses quarterly revenue estimates and takes $16.6B restructuring charge')">
+              INTC Earnings Miss
+            </button>
+            <button class="wb-chip" onclick="loadSampleNews('AAPL iPhone revenue matches consensus while Services hits record; market awaits next AI catalyst')">
+              AAPL Mixed Report
+            </button>
+          </div>
+
+          <div id="analyzer-result-box" class="wb-analyzer-output">
+            <!-- Populated dynamically by app.js -->
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+    </div>
 
     <!-- ===================================================================
          SECTION 1: CFDs DESK (XAUUSD, BTCUSD, USDJPY, FX, INDICES, OIL)
@@ -278,11 +334,11 @@
           <div>
             <div class="wb-eyebrow">
               <span class="wb-index-badge">01</span>
-              <span>DEDICATED CFDs SECTION • SPOT &amp; LEVERAGED CONTRACTS FOR DIFFERENCE</span>
+              <span>DEDICATED CFDs SECTION • LIVE TRADINGVIEW PRICES (OANDA / BITSTAMP / FX)</span>
             </div>
             <h2 class="wb-section-title">CFDs Trading Desk — XAUUSD, BTCUSD, USDJPY &amp; Global Macros</h2>
             <p class="wb-section-desc">
-              Live streaming prices with <strong>BUY</strong>, <strong>SELL</strong>, or <strong>HOLD</strong> advisories triggered strictly by <strong>ForexFactory</strong> CPI/NFP releases and <strong>Yahoo Finance</strong> macro reports.
+              Live prices pulled directly from <strong>TradingView (`scanner.tradingview.com`)</strong> every 4 seconds. Click any card's <strong>[📈 Live TV Chart]</strong> button to inspect the instrument on TradingView.
             </p>
           </div>
 
@@ -309,24 +365,20 @@
           </div>
         </div>
 
-        <!-- MODERN BENTO CARDS VIEW FOR CFDs (Default Brand-New Look) -->
-        <div id="cfds-cards-container" class="wb-cards-grid">
-          <!-- Populated dynamically by app.js -->
-        </div>
+        <div id="cfds-cards-container" class="wb-cards-grid"></div>
 
-        <!-- SLEEK MONOCHROME MATRIX VIEW FOR CFDs (Toggleable) -->
         <div id="cfds-table-container" class="wb-table-wrap" style="display:none;">
           <table class="wb-table">
             <thead>
               <tr>
-                <th>CFD Instrument</th>
+                <th>CFD Instrument (TradingView Ticker)</th>
                 <th>Category</th>
-                <th>Live Price (Bid / Ask)</th>
+                <th>Live TradingView Price</th>
                 <th>24h Change</th>
-                <th>Spread</th>
+                <th>Day High / Low</th>
                 <th>News Advisory</th>
                 <th>Driving Financial / Macro News Report</th>
-                <th>Execution Levels (Entry / TP / SL)</th>
+                <th>Chart</th>
               </tr>
             </thead>
             <tbody id="cfds-table-body"></tbody>
@@ -344,11 +396,11 @@
           <div>
             <div class="wb-eyebrow">
               <span class="wb-index-badge">02</span>
-              <span>DEDICATED OPTIONS SECTION • CORPORATE EARNINGS &amp; CPI/NFP VOLATILITY</span>
+              <span>DEDICATED OPTIONS SECTION • LIVE TRADINGVIEW EQUITY &amp; ETF QUOTES</span>
             </div>
-            <h2 class="wb-section-title">Options Trading Desk — Equity &amp; ETF Calls / Puts Driven by News Reports</h2>
+            <h2 class="wb-section-title">Options Trading Desk — Driven Solely by Earnings &amp; Macro News Reports</h2>
             <p class="wb-section-desc">
-              Advising <strong>BUY</strong>, <strong>SELL</strong>, or <strong>HOLD</strong> on options contracts solely from corporate earnings reports (e.g., <strong>META</strong> earnings beat → BUY Calls; <strong>INTC</strong> loss report → SELL / Puts) and macro catalysts.
+              Live underlying stock prices pulled directly from <strong>TradingView (`NASDAQ` / `NYSE` / `AMEX`)</strong> with <strong>BUY / SELL / HOLD</strong> options advisories based strictly on financial news reports.
             </p>
           </div>
 
@@ -375,21 +427,17 @@
           </div>
         </div>
 
-        <!-- MODERN BENTO CARDS VIEW FOR OPTIONS -->
-        <div id="options-cards-container" class="wb-cards-grid">
-          <!-- Populated dynamically by app.js -->
-        </div>
+        <div id="options-cards-container" class="wb-cards-grid"></div>
 
-        <!-- SLEEK MONOCHROME MATRIX VIEW FOR OPTIONS -->
         <div id="options-table-container" class="wb-table-wrap" style="display:none;">
           <table class="wb-table">
             <thead>
               <tr>
-                <th>Underlying Stock</th>
-                <th>Live Share Price</th>
+                <th>Underlying (TradingView Ticker)</th>
+                <th>Live TradingView Share Price</th>
                 <th>24h Move</th>
                 <th>Target Option Contract</th>
-                <th>Live Option Premium</th>
+                <th>Est. Option Premium</th>
                 <th>IV &amp; Delta</th>
                 <th>News Advisory</th>
                 <th>Financial News Report Rationale</th>
@@ -402,7 +450,7 @@
     </section>
 
     <!-- ===================================================================
-         SECTION 3: FUTURES DESK (ES=F, NQ=F, GC=F, CL=F, ZN=F, 6J=F, BTC=F)
+         SECTION 3: FUTURES DESK (ES1!, NQ1!, GC1!, CL1!, ZN1!, 6J1!, BTC1!)
          =================================================================== -->
     <section id="desk-section-futures" class="wb-desk-section">
       <div class="wb-section-card">
@@ -410,11 +458,11 @@
           <div>
             <div class="wb-eyebrow">
               <span class="wb-index-badge">03</span>
-              <span>DEDICATED FUTURES SECTION • CME, COMEX, NYMEX &amp; CBOT CONTRACTS</span>
+              <span>DEDICATED FUTURES SECTION • LIVE TRADINGVIEW CME / COMEX / NYMEX QUOTES</span>
             </div>
             <h2 class="wb-section-title">Futures Trading Desk — Index, Commodities, Treasury &amp; FX Futures</h2>
             <p class="wb-section-desc">
-              Standardized institutional futures contracts (<strong>ES=F</strong>, <strong>NQ=F</strong>, <strong>GC=F</strong>, <strong>CL=F</strong>, <strong>ZN=F</strong>, <strong>BTC=F</strong>) with real-time prices and 100% news-backed <strong>BUY / SELL / HOLD</strong> signals.
+              Live exchange futures prices pulled directly from <strong>TradingView (`CME_MINI`, `COMEX`, `NYMEX`, `CBOT`)</strong> paired with 100% news-driven <strong>BUY / SELL / HOLD</strong> signals.
             </p>
           </div>
 
@@ -441,24 +489,20 @@
           </div>
         </div>
 
-        <!-- MODERN BENTO CARDS VIEW FOR FUTURES -->
-        <div id="futures-cards-container" class="wb-cards-grid">
-          <!-- Populated dynamically by app.js -->
-        </div>
+        <div id="futures-cards-container" class="wb-cards-grid"></div>
 
-        <!-- SLEEK MONOCHROME MATRIX VIEW FOR FUTURES -->
         <div id="futures-table-container" class="wb-table-wrap" style="display:none;">
           <table class="wb-table">
             <thead>
               <tr>
-                <th>Futures Contract</th>
+                <th>Futures Contract (TradingView Ticker)</th>
                 <th>Exchange &amp; Specs</th>
-                <th>Live Contract Price</th>
+                <th>Live TradingView Price</th>
                 <th>24h Change</th>
-                <th>Cycle</th>
+                <th>Day High / Low</th>
                 <th>News Advisory</th>
                 <th>Macro News Report Catalyst</th>
-                <th>Target &amp; Stop Levels</th>
+                <th>Chart</th>
               </tr>
             </thead>
             <tbody id="futures-table-body"></tbody>
@@ -473,7 +517,6 @@
     <section id="desk-section-news" class="wb-desk-section">
       <div class="wb-dual-news-grid">
 
-        <!-- ForexFactory Direct Economic Calendar -->
         <div class="wb-section-card">
           <div class="wb-section-head">
             <div>
@@ -483,7 +526,7 @@
               </div>
               <h2 class="wb-section-title">CPI, NFP, FOMC &amp; High-Impact Releases</h2>
               <p class="wb-section-desc">
-                Pulled direct from ForexFactory's public feed. Click any row to test its impact in the Signal Simulator.
+                Pulled direct from ForexFactory's public feed (`nfs.faireconomy.media`). Click any release to run it through the Signal Engine.
               </p>
             </div>
             <div class="wb-filter-group">
@@ -510,7 +553,6 @@
           </div>
         </div>
 
-        <!-- Yahoo Finance Live Financial & Earnings News -->
         <div class="wb-section-card">
           <div class="wb-section-head">
             <div>
@@ -531,9 +573,7 @@
             />
           </div>
 
-          <div id="full-yahoo-news-grid" class="wb-news-stack">
-            <!-- Populated by app.js -->
-          </div>
+          <div id="full-yahoo-news-grid" class="wb-news-stack"></div>
         </div>
 
       </div>
@@ -546,7 +586,7 @@
     <div class="wb-footer-inner">
       <div>
         <strong>KPOINT COF — NEXT-GEN WHITE &amp; BLACK MACRO NEWS TRADING TERMINAL</strong>
-        <p>Live Yahoo Finance &amp; ForexFactory Feeds (CPI, NFP, FOMC, Earnings) • Zero API Keys Required</p>
+        <p>100% Real-Time Prices from TradingView (`scanner.tradingview.com`) + Live Yahoo Finance &amp; ForexFactory Feeds • Zero API Keys Required</p>
       </div>
       <div class="wb-footer-pills">
         <span class="wb-pill-outline">CFDs (XAUUSD • BTCUSD • USDJPY)</span>
