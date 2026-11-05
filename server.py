@@ -1,315 +1,250 @@
 #!/usr/bin/env python3
 """
-QUANTO EQUITIES // INSTITUTIONAL HEDGE FUND STOCK TERMINAL
-100% Stock-Focused Backend Server with Real-Time Yahoo Finance API Integration
+KPOINT COF // INSTITUTIONAL WHITE & GREY MACRO NEWS TRADING TERMINAL
+Zero-API-Key Live Backend Server for CFDs, Options, and Futures
 
-Features:
-- Live Yahoo Finance Quote Ingestion (/api/yahoo/quotes)
-- Live Yahoo Finance Equities News Ingestion (/api/yahoo/news)
-- Complete coverage of Top 20 US Stocks, Top 20 UK Stocks, and High Risers
-- In-memory intelligent caching with TTL to prevent rate limiting
-- Zero external dependencies (uses standard library http.server, urllib, json, xml)
+Live Data Sources (No API Keys Required):
+1. ForexFactory Public Calendar Feed (CPI, NFP, FOMC, GDP, PCE, PMI):
+   - https://nfs.faireconomy.media/ff_calendar_thisweek.json
+2. Yahoo Finance v8 Chart & Quote API (CFDs, Options Underlyings, Exchange Futures):
+   - https://query1.finance.yahoo.com/v8/finance/chart/{symbol}
+3. Yahoo Finance Live RSS News & Earnings Wire:
+   - https://feeds.finance.yahoo.com/rss/2.0/headline
 """
 
-import sys
 import os
 import json
+import time
 import urllib.request
 import urllib.parse
 import xml.etree.ElementTree as ET
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
-import time
 
 PORT = 8080
 WORKSPACE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Caching storage
 QUOTES_CACHE = {}
-QUOTES_CACHE_TIMESTAMP = 0
-NEWS_CACHE = []
-NEWS_CACHE_TIMESTAMP = 0
-CACHE_TTL_SECONDS = 15
+QUOTES_TS = 0
+FF_CACHE = []
+FF_TS = 0
+YF_NEWS_CACHE = []
+YF_NEWS_TS = 0
+CACHE_TTL = 15
 
-# Symbols coverage
-US_SYMBOLS = [
-    "NVDA", "MSFT", "PLTR", "AMZN", "AAPL", "META", "AVGO", "TSLA",
-    "LLY", "VRT", "CEG", "JPM", "BRK-B", "TSM", "GE", "LMT", "AMD",
-    "NOW", "XOM", "GOOGL"
+TRACKED_SYMBOLS = [
+    # CFDs & Futures
+    "GC=F", "BTC-USD", "ETH-USD", "JPY=X", "EURUSD=X", "GBPUSD=X",
+    "AUDUSD=X", "CAD=X", "^GDAXI", "ES=F", "NQ=F", "YM=F", "RTY=F",
+    "SI=F", "CL=F", "NG=F", "ZN=F", "ZB=F", "6J=F", "6E=F", "HG=F",
+    # Options Underlyings
+    "META", "NVDA", "SPY", "QQQ", "MSFT", "AMZN", "TSLA", "NFLX",
+    "GLD", "AAPL", "AMD", "TLT", "INTC", "BA"
 ]
-
-UK_SYMBOLS = [
-    "RR.L", "AZN.L", "BA.L", "SHEL.L", "ARM", "BARC.L", "HSBA.L", "REL.L",
-    "RIO.L", "III.L", "LSEG.L", "ULVR.L", "GSK.L", "FLTR.L", "NXT.L",
-    "GLEN.L", "BP.L", "CPG.L", "AHT.L", "IHG.L"
-]
-
-RISER_SYMBOLS = [
-    "PLTR", "APP", "MSTR", "ALAB", "IONQ", "RKLB", "VRT", "NVDA",
-    "CEG", "HOOD", "VKTX", "CLS", "AXON", "NET", "SMCI", "ANET"
-]
-
-ALL_TRACKED_SYMBOLS = list(dict.fromkeys(US_SYMBOLS + UK_SYMBOLS + RISER_SYMBOLS))
 
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-    "Accept": "application/json, text/plain, */*",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Accept": "application/json, text/xml, application/xml, */*",
     "Accept-Language": "en-US,en;q=0.9"
 }
 
-def fetch_single_quote(symbol):
-    """Fetch live quote from Yahoo Finance v8 chart API."""
-    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(symbol)}?interval=1d&range=5d"
+
+def classify_news_advisory(text):
+    """Classify financial/macro report into BUY, SELL, or HOLD solely from news text."""
+    lower = (text or "").lower()
+    bull_words = ["beat", "beats", "surge", "surges", "jumps", "raises", "record", "inflows", "cut", "cools", "strong", "expands", "upgrade"]
+    bear_words = ["miss", "misses", "slashes", "cuts guidance", "losses", "restructuring", "delay", "inventory build", "contraction", "downgrade", "slumps"]
+    hold_words = ["in line", "in-line", "unchanged", "steady", "mixed", "awaits"]
+
+    bull = sum(2 for w in bull_words if w in lower)
+    bear = sum(2 for w in bear_words if w in lower)
+    hold = sum(3 for w in hold_words if w in lower)
+
+    if bear > bull:
+        return "SELL"
+    if hold > bull and hold > bear:
+        return "HOLD"
+    return "BUY"
+
+
+def fetch_single_yahoo_quote(symbol):
+    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(symbol)}?interval=1d&range=2d"
     try:
         req = urllib.request.Request(url, headers=HEADERS)
-        with urllib.request.urlopen(req, timeout=4) as response:
-            data = json.loads(response.read().decode("utf-8"))
-            result = data.get("chart", {}).get("result", [])
-            if not result:
+        with urllib.request.urlopen(req, timeout=4) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            res = data.get("chart", {}).get("result", [])
+            if not res:
                 return None
-            meta = result[0].get("meta", {})
-            current_price = meta.get("regularMarketPrice")
-            prev_close = meta.get("chartPreviousClose") or meta.get("previousClose") or current_price
-            
-            if current_price is None:
+            meta = res[0].get("meta", {})
+            price = meta.get("regularMarketPrice")
+            prev = meta.get("chartPreviousClose") or meta.get("previousClose") or price
+            if price is None:
                 return None
-                
-            change = current_price - prev_close if prev_close else 0.0
-            change_percent = (change / prev_close * 100.0) if prev_close else 0.0
-            
+            chg = price - prev if prev else 0.0
+            chg_pct = (chg / prev * 100.0) if prev else 0.0
             return {
                 "symbol": symbol,
-                "price": round(current_price, 2),
-                "previousClose": round(prev_close, 2) if prev_close else round(current_price, 2),
-                "change": round(change, 2),
-                "changePercent": round(change_percent, 2),
-                "dayHigh": round(meta.get("regularMarketDayHigh", current_price), 2),
-                "dayLow": round(meta.get("regularMarketDayLow", current_price), 2),
-                "volume": meta.get("regularMarketVolume", 0),
-                "currency": meta.get("currency", "USD"),
-                "exchange": meta.get("exchangeName", "US"),
+                "price": round(price, 5),
+                "changePercent": round(chg_pct, 2),
                 "timestamp": datetime.utcnow().isoformat() + "Z"
             }
-    except Exception as e:
+    except Exception:
         return None
 
-def fetch_all_quotes(symbols=None):
-    """Fetch quotes for symbols in parallel with intelligent caching."""
-    global QUOTES_CACHE, QUOTES_CACHE_TIMESTAMP
-    now = time.time()
-    
-    target_symbols = symbols or ALL_TRACKED_SYMBOLS
-    
-    # Return cache if still fresh and covers target symbols
-    if (now - QUOTES_CACHE_TIMESTAMP < CACHE_TTL_SECONDS) and all(s in QUOTES_CACHE for s in target_symbols):
-        return {s: QUOTES_CACHE[s] for s in target_symbols if s in QUOTES_CACHE}
-        
-    with ThreadPoolExecutor(max_workers=8) as executor:
-        results = list(executor.map(fetch_single_quote, target_symbols))
-        
-    for res in results:
-        if res:
-            QUOTES_CACHE[res["symbol"]] = res
-            
-    QUOTES_CACHE_TIMESTAMP = now
-    return {s: QUOTES_CACHE[s] for s in target_symbols if s in QUOTES_CACHE}
 
-def fetch_yahoo_stock_news(symbols=None):
-    """Fetch real-time stock news from Yahoo Finance RSS feeds."""
-    global NEWS_CACHE, NEWS_CACHE_TIMESTAMP
+def fetch_all_quotes():
+    global QUOTES_CACHE, QUOTES_TS
     now = time.time()
-    
-    if (now - NEWS_CACHE_TIMESTAMP < CACHE_TTL_SECONDS * 2) and NEWS_CACHE:
-        return NEWS_CACHE
-        
-    sample_symbols = "NVDA,MSFT,AAPL,PLTR,TSLA,AMZN,META,GOOGL,RR.L,AZN.L"
-    urls = [
-        f"https://feeds.finance.yahoo.com/rss/2.0/headline?s={sample_symbols}&region=US&lang=en-US",
-        "https://finance.yahoo.com/news/rssindex"
-    ]
-    
-    all_news = []
-    seen_titles = set()
-    
-    for url in urls:
-        try:
-            req = urllib.request.Request(url, headers=HEADERS)
-            with urllib.request.urlopen(req, timeout=4) as response:
-                xml_data = response.read()
-                root = ET.fromstring(xml_data)
-                for item in root.findall(".//item")[:15]:
-                    title = item.findtext("title", "").strip()
-                    link = item.findtext("link", "").strip()
-                    pub_date = item.findtext("pubDate", "").strip()
-                    desc = item.findtext("description", "").strip()
-                    
-                    if title and title not in seen_titles:
-                        seen_titles.add(title)
-                        
-                        # Tag relevant stock symbol
-                        matched_symbol = "GENERAL"
-                        for sym in ALL_TRACKED_SYMBOLS:
-                            if sym.replace(".L", "").lower() in title.lower() or sym.replace(".L", "").lower() in desc.lower():
-                                matched_symbol = sym
-                                break
-                                
-                        all_news.append({
-                            "source": "Yahoo Finance",
-                            "symbol": matched_symbol,
-                            "title": title,
-                            "url": link,
-                            "published": pub_date,
-                            "snippet": desc[:160] + "..." if len(desc) > 160 else desc,
-                            "sentiment": "BULLISH" if any(w in title.lower() for w in ["soars", "jumps", "rally", "high", "buy", "gain", "surges", "upgrade"]) else ("BEARISH" if any(w in title.lower() for w in ["falls", "drops", "slumps", "sell", "cuts", "crash"]) else "CATALYST")
-                        })
-        except Exception:
-            pass
-            
-    if all_news:
-        NEWS_CACHE = all_news
-        NEWS_CACHE_TIMESTAMP = now
-        
-    return NEWS_CACHE
+    if now - QUOTES_TS < CACHE_TTL and QUOTES_CACHE:
+        return QUOTES_CACHE
 
-class StockTerminalHandler(SimpleHTTPRequestHandler):
+    with ThreadPoolExecutor(max_workers=10) as ex:
+        results = list(ex.map(fetch_single_yahoo_quote, TRACKED_SYMBOLS))
+
+    for r in results:
+        if r:
+            QUOTES_CACHE[r["symbol"]] = r
+    QUOTES_TS = now
+    return QUOTES_CACHE
+
+
+def fetch_forexfactory_calendar():
+    global FF_CACHE, FF_TS
+    now = time.time()
+    if now - FF_TS < 60 and FF_CACHE:
+        return FF_CACHE
+
+    url = "https://nfs.faireconomy.media/ff_calendar_thisweek.json"
+    try:
+        req = urllib.request.Request(url, headers=HEADERS)
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            events = json.loads(resp.read().decode("utf-8"))
+            parsed = []
+            for ev in events:
+                impact = (ev.get("impact") or "").upper()
+                if impact not in ("HIGH", "MEDIUM"):
+                    continue
+                title = ev.get("title", "Macro Release")
+                country = ev.get("country", "USD")
+                actual = ev.get("actual") or "Live"
+                forecast = ev.get("forecast") or "—"
+                previous = ev.get("previous") or "—"
+                adv = classify_news_advisory(f"{country} {title} {actual}")
+                parsed.append({
+                    "time": ev.get("date", "THIS WEEK")[:16].replace("T", " "),
+                    "currency": country,
+                    "event": title,
+                    "impact": "HIGH" if impact == "HIGH" else "MEDIUM",
+                    "actual": actual,
+                    "forecast": forecast,
+                    "previous": previous,
+                    "advisory": adv,
+                    "targetAssets": "XAUUSD, USDJPY, ES=F, SPY" if country == "USD" else f"{country}USD CFD & Futures",
+                    "summary": f"ForexFactory Direct ({country}): {title} (Forecast: {forecast}, Previous: {previous})"
+                })
+            if parsed:
+                FF_CACHE = parsed[:14]
+                FF_TS = now
+    except Exception:
+        pass
+    return FF_CACHE
+
+
+def fetch_yahoo_news():
+    global YF_NEWS_CACHE, YF_NEWS_TS
+    now = time.time()
+    if now - YF_NEWS_TS < 45 and YF_NEWS_CACHE:
+        return YF_NEWS_CACHE
+
+    rss_url = "https://feeds.finance.yahoo.com/rss/2.0/headline?s=META,NVDA,SPY,AAPL,TSLA,MSFT,AMZN,GC=F,BTC-USD&region=US&lang=en-US"
+    try:
+        req = urllib.request.Request(rss_url, headers=HEADERS)
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            root = ET.fromstring(resp.read())
+            items = []
+            for item in root.findall(".//item")[:12]:
+                title = (item.findtext("title") or "").strip()
+                link = (item.findtext("link") or "https://finance.yahoo.com").strip()
+                pub = (item.findtext("pubDate") or "Live Wire").strip()[:22]
+                desc = (item.findtext("description") or "").strip()
+                if not title:
+                    continue
+                adv = classify_news_advisory(f"{title} {desc}")
+                items.append({
+                    "source": "Yahoo Finance • Live RSS",
+                    "symbol": "MACRO / EQUITY",
+                    "published": pub,
+                    "title": title,
+                    "snippet": desc[:180] + "..." if len(desc) > 180 else desc,
+                    "url": link,
+                    "advisory": adv,
+                    "affectedDesks": f"Advisory: {adv} across correlated CFDs, Options & Futures"
+                })
+            if items:
+                YF_NEWS_CACHE = items
+                YF_NEWS_TS = now
+    except Exception:
+        pass
+    return YF_NEWS_CACHE
+
+
+class KpointCofHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=WORKSPACE_DIR, **kwargs)
 
     def do_GET(self):
         parsed = urllib.parse.urlparse(self.path)
-        params = urllib.parse.parse_qs(parsed.query)
-
-        if parsed.path == "/api/status":
-            self.send_json_response({
+        if parsed.path == "/api/all":
+            self.send_json({
                 "status": "ONLINE",
-                "engine": "QUANTO EQUITIES // YAHOO FINANCE LIVE FEED",
-                "coverage": {
-                    "total_stocks": len(ALL_TRACKED_SYMBOLS),
-                    "us_stocks": len(US_SYMBOLS),
-                    "uk_stocks": len(UK_SYMBOLS),
-                    "high_risers": len(RISER_SYMBOLS)
-                },
-                "yahoo_api_sync": "CONNECTED",
-                "timestamp": datetime.utcnow().isoformat() + "Z",
-                "port": PORT
-            })
-            return
-
-        if parsed.path == "/api/yahoo/quotes":
-            sym_param = params.get("symbols", [None])[0]
-            symbols_to_fetch = [s.strip().upper() for s in sym_param.split(",")] if sym_param else ALL_TRACKED_SYMBOLS
-            quotes = fetch_all_quotes(symbols_to_fetch)
-            self.send_json_response({
-                "status": "success",
-                "source": "Yahoo Finance API (v8)",
-                "count": len(quotes),
-                "quotes": quotes,
+                "quotes": fetch_all_quotes(),
+                "forexfactory": fetch_forexfactory_calendar(),
+                "yahooNews": fetch_yahoo_news(),
                 "timestamp": datetime.utcnow().isoformat() + "Z"
             })
             return
-
-        if parsed.path == "/api/yahoo/news":
-            news = fetch_yahoo_stock_news()
-            self.send_json_response({
-                "status": "success",
-                "source": "Yahoo Finance RSS Equities Wire",
-                "count": len(news),
-                "items": news,
+        if parsed.path == "/api/quotes":
+            self.send_json({
+                "status": "ONLINE",
+                "quotes": fetch_all_quotes(),
                 "timestamp": datetime.utcnow().isoformat() + "Z"
             })
             return
-
-        if parsed.path == "/api/stocks/us":
-            quotes = fetch_all_quotes(US_SYMBOLS)
-            self.send_json_response({
-                "status": "success",
-                "market": "US_TOP_20",
-                "symbols": US_SYMBOLS,
-                "quotes": quotes,
+        if parsed.path == "/api/macro-news":
+            self.send_json({
+                "status": "ONLINE",
+                "forexfactory": fetch_forexfactory_calendar(),
+                "yahooNews": fetch_yahoo_news(),
                 "timestamp": datetime.utcnow().isoformat() + "Z"
             })
             return
-
-        if parsed.path == "/api/stocks/uk":
-            quotes = fetch_all_quotes(UK_SYMBOLS)
-            self.send_json_response({
-                "status": "success",
-                "market": "UK_TOP_20",
-                "symbols": UK_SYMBOLS,
-                "quotes": quotes,
-                "timestamp": datetime.utcnow().isoformat() + "Z"
-            })
-            return
-
-        if parsed.path == "/api/stocks/high-risers":
-            quotes = fetch_all_quotes(RISER_SYMBOLS)
-            self.send_json_response({
-                "status": "success",
-                "category": "HIGH_GROWTH_RISERS",
-                "symbols": RISER_SYMBOLS,
-                "quotes": quotes,
-                "timestamp": datetime.utcnow().isoformat() + "Z"
-            })
-            return
-
         super().do_GET()
 
-    def do_POST(self):
-        parsed = urllib.parse.urlparse(self.path)
-
-        if parsed.path in ["/api/yahoo/sync", "/api/scan"]:
-            quotes = fetch_all_quotes(ALL_TRACKED_SYMBOLS)
-            news = fetch_yahoo_stock_news()
-            self.send_json_response({
-                "status": "success",
-                "message": "Real-time Yahoo Finance stock quotes and equities news synchronized.",
-                "synced_quotes_count": len(quotes),
-                "synced_news_count": len(news),
-                "timestamp": datetime.utcnow().isoformat() + "Z"
-            })
-            return
-
-        self.send_error(404, "Endpoint Not Found")
-
-    def send_json_response(self, data, status_code=200):
-        body = json.dumps(data, indent=2).encode("utf-8")
-        self.send_response(status_code)
+    def send_json(self, payload, status=200):
+        body = json.dumps(payload, indent=2).encode("utf-8")
+        self.send_response(status)
         self.send_header("Content-Type", "application/json")
         self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
 
-    def do_OPTIONS(self):
-        self.send_response(200)
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
-        self.end_headers()
 
 def run_server():
-    server_address = ("", PORT)
-    httpd = HTTPServer(server_address, StockTerminalHandler)
-    print("=" * 72)
-    print("  QUANTO EQUITIES // INSTITUTIONAL HEDGE FUND STOCK TERMINAL")
-    print(f"  URL: http://localhost:{PORT}")
-    print("  Live Data Provider: Yahoo Finance API (v8)")
-    print("  Stock Coverage: Top 20 US Stocks, Top 20 UK Stocks, High Risers")
-    print("  API Endpoints:")
-    print(f"    - GET  http://localhost:{PORT}/api/status")
-    print(f"    - GET  http://localhost:{PORT}/api/yahoo/quotes")
-    print(f"    - GET  http://localhost:{PORT}/api/yahoo/news")
-    print(f"    - POST http://localhost:{PORT}/api/yahoo/sync")
-    print("=" * 72)
-    print("Press Ctrl+C to stop.")
+    httpd = HTTPServer(("", PORT), KpointCofHandler)
+    print("=" * 74)
+    print("  KPOINT COF // WHITE & GREY MACRO NEWS TRADING TERMINAL")
+    print(f"  Local URL: http://localhost:{PORT}")
+    print("  Desks: CFDs (XAUUSD, BTCUSD, USDJPY) | Options (META, NVDA) | Futures")
+    print("  Feeds: Yahoo Finance & ForexFactory Direct (Zero API Keys Required)")
+    print("=" * 74)
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
-        print("\nStopping server gracefully...")
         httpd.server_close()
+
 
 if __name__ == "__main__":
     run_server()
