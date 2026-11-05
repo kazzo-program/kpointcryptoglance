@@ -1,6 +1,6 @@
-# NEXUS LED // 5-Crypto Live TradingView Terminal (`BTC` • `ETH` • `SOL` • `HYPE` • `XRP`)
+# KPOINTCRYPTOGLANCE // 5-Crypto Live TradingView Terminal (`BTC` • `ETH` • `SOL` • `HYPE` • `XRP`)
 
-> **Pitch-Black Cyber LED Interface // 3.0-Second Synchronized LED Glow & Audio Beep // Direct Live TradingView Prices for BTC, ETH, SOL, HYPE & XRP // Live Crypto News Wire // Top 5 Highest Rising Cryptos (Week, Month & Year)**
+> **Pitch-Black Cyber LED Interface // 3.0-Second Synchronized LED Glow // Direct Live TradingView Prices for BTC, ETH, SOL, HYPE & XRP // Live Crypto News Wire // Top 5 Highest Rising Cryptos (Week, Month & Year) // "Kpoint made this one!"**
 
 ---
 
@@ -13,9 +13,9 @@
 - **Section 04 — Hyperliquid (`HYPE`)**: Live price & multi-timeframe metrics directly from `BYBIT:HYPEUSDT` / `OKX:HYPEUSDT` on TradingView + embedded interactive TradingView chart.
 - **Section 05 — Ripple (`XRP`)**: Live price & multi-timeframe metrics directly from `BINANCE:XRPUSDT` on TradingView + embedded interactive TradingView chart.
 
-### 2. Pitch-Black Interface with 3-Second Glowing & Beeping LED Outline
+### 2. Pitch-Black Interface with 3-Second Glowing LED Outline
 - Built on a pitch-black (`#000000`) chassis wrapped in a full perimeter **LED Outline Frame** with 4 corner LED nodes and 48 top/bottom LED diodes.
-- **Every 3.0 seconds**, the LED perimeter and all section borders burst with a synchronized neon glow (`led-pulse-active`) accompanied by a crisp **Web Audio API synthesizer beep** (with a one-click Mute/Unmute toggle and 4 selectable LED colors: *Cyber Cyan*, *Matrix Emerald*, *Neon Magenta*, and *Solar Amber*).
+- **Every 3.0 seconds**, the LED perimeter and all section borders burst with a synchronized neon glow (`led-pulse-active`) with 3 selectable LED colors: *Matrix Emerald*, *Neon Magenta*, and *Solar Amber*.
 
 ### 3. Live Crypto News Sidebar
 - Located on the right side of the terminal (`#live-crypto-news-sidebar`), pulling real-time crypto headlines directly from public crypto news feeds (**CryptoCompare News API**, **CoinDesk**, **CoinTelegraph**, **Decrypt**).
@@ -30,11 +30,4 @@
 
 ---
 
-## 🚀 How to Run
-
-1. **Direct Browser Mode**: Open [`index.html`](file:///c:/Users/kb90G/OneDrive/quanto2/index.html) directly in any modern browser.
-2. **Local Python Server Mode**:
-   ```powershell
-   python server.py
-   ```
-   Then visit `http://localhost:8080`.
+*Kpoint made this one!*

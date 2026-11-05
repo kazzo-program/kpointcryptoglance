@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NEXUS LED // 5-Crypto Live TradingView Terminal (BTC • ETH • SOL • HYPE • XRP)</title>
-  <meta name="description" content="Pitch-Black Cyber LED Crypto Terminal featuring dedicated live TradingView price sections for BTC, ETH, SOL, HYPE, and XRP, 3-second synchronized LED pulse & audio beep, live Crypto News sidebar, and Top 5 Highest Rising Cryptocurrencies of the Week, Month, and Year." />
+  <title>KPOINTCRYPTOGLANCE // 5-Crypto Live TradingView Terminal (BTC • ETH • SOL • HYPE • XRP)</title>
+  <meta name="description" content="KPOINTCRYPTOGLANCE — Pitch-Black Cyber LED Crypto Terminal featuring dedicated live TradingView price sections for BTC, ETH, SOL, HYPE, and XRP, 3-second synchronized LED pulse, live Crypto News sidebar, and Top 5 Highest Rising Cryptocurrencies of the Week, Month, and Year." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -59,21 +59,21 @@
     </div>
 
     <!-- ===================================================================
-         TOP COMMAND HEADER WITH 3-SECOND LED HEARTBEAT & AUDIO BEEP CONTROLS
+         TOP COMMAND HEADER WITH 3-SECOND LED HEARTBEAT CONTROLS
          =================================================================== -->
     <header class="cyber-header led-box">
       <div class="header-left">
         <div class="brand-emblem" id="brand-emblem-pulse">
-          <span class="emblem-core">⚡</span>
+          <span class="emblem-core">KP</span>
           <span class="emblem-ring"></span>
         </div>
         <div class="brand-titles">
           <div class="brand-row">
-            <h1>NEXUS // 5-CRYPTO LED TERMINAL</h1>
+            <h1>KPOINTCRYPTOGLANCE</h1>
             <span class="led-badge-cyan">TRADINGVIEW DIRECT FEED</span>
             <span class="led-badge-green" id="pulse-indicator-pill">
               <span class="led-bulb-dot" id="pulse-bulb-dot"></span>
-              3.0s LED PULSE &amp; BEEP
+              3.0s LED PULSE
             </span>
           </div>
           <p class="brand-subtitle">
@@ -82,11 +82,11 @@
         </div>
       </div>
 
-      <!-- 3-Second Pulse Countdown Bar & Audio Beep Synth Controls -->
+      <!-- 3-Second Pulse Countdown Bar & Controls -->
       <div class="header-right">
         <div class="led-heartbeat-monitor">
           <div class="hb-top-row">
-            <span class="hb-label">LED GLOW &amp; BEEP CYCLE:</span>
+            <span class="hb-label">LED GLOW CYCLE:</span>
             <span class="hb-timer" id="pulse-countdown-text">3.0s</span>
           </div>
           <div class="hb-progress-track">
@@ -99,14 +99,8 @@
         </div>
 
         <div class="header-control-btns">
-          <button class="led-btn led-btn-sound active" id="audio-beep-toggle-btn" onclick="toggleAudioBeep()">
-            <span class="sound-icon" id="sound-icon">🔊</span>
-            <span id="sound-btn-label">3s Beep Sound: ON</span>
-          </button>
-
           <div class="led-color-picker" title="Switch LED Glow Color">
-            <button class="color-dot active" data-theme="cyan" onclick="setLedColorTheme('cyan', this)" style="--dot-color:#00f3ff;" title="Cyber Cyan LED"></button>
-            <button class="color-dot" data-theme="emerald" onclick="setLedColorTheme('emerald', this)" style="--dot-color:#00ff88;" title="Matrix Emerald LED"></button>
+            <button class="color-dot active" data-theme="emerald" onclick="setLedColorTheme('emerald', this)" style="--dot-color:#00ff88;" title="Matrix Emerald LED"></button>
             <button class="color-dot" data-theme="magenta" onclick="setLedColorTheme('magenta', this)" style="--dot-color:#ff00ea;" title="Neon Magenta LED"></button>
             <button class="color-dot" data-theme="amber" onclick="setLedColorTheme('amber', this)" style="--dot-color:#ffae00;" title="Solar Amber LED"></button>
           </div>
@@ -351,7 +345,10 @@
 
     <footer class="cyber-footer">
       <div>
-        <strong>NEXUS LED // 5-CRYPTO LIVE TRADINGVIEW TERMINAL</strong> — Real-Time Prices from TradingView (`scanner.tradingview.com`) + Live Crypto News &amp; Top 5 Risers
+        <strong>KPOINTCRYPTOGLANCE // 5-CRYPTO LIVE TRADINGVIEW TERMINAL</strong> — Real-Time Prices from TradingView (`scanner.tradingview.com`) + Live Crypto News &amp; Top 5 Risers
+      </div>
+      <div class="kpoint-signature-badge">
+        Kpoint made this one!
       </div>
       <div>
         <span>LED Pulse Interval: <strong>Every 3.0 Seconds</strong></span> •

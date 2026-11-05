@@ -1,5 +1,5 @@
 /* ==========================================================================
-   NEXUS LED // PITCH-BLACK 5-CRYPTO LIVE TRADINGVIEW TERMINAL
+   KPOINTCRYPTOGLANCE // PITCH-BLACK 5-CRYPTO LIVE TRADINGVIEW TERMINAL
    - Pitch-black interface (#000000 / #04060a)
    - Synchronized LED outline that glows and pulses with glowing lights every 3s
    - Dedicated sections for BTC, ETH, SOL, HYPE, and XRP
@@ -13,11 +13,11 @@
   --bg-card: #050911;
   --bg-input: #020408;
 
-  /* Dynamic LED Theme Colors (Default: Cyber Cyan + Neon Emerald) */
-  --led-primary: #00f3ff;
-  --led-primary-rgb: 0, 243, 255;
-  --led-secondary: #00ff88;
-  --led-secondary-rgb: 0, 255, 136;
+  /* Dynamic LED Theme Colors (Default: Matrix Emerald + Solar Amber — No Blue) */
+  --led-primary: #00ff88;
+  --led-primary-rgb: 0, 255, 136;
+  --led-secondary: #ffae00;
+  --led-secondary-rgb: 255, 174, 0;
   --led-accent: #ff00ea;
 
   /* Semantic Market Colors */
@@ -42,15 +42,15 @@
 body[data-led-theme="emerald"] {
   --led-primary: #00ff88;
   --led-primary-rgb: 0, 255, 136;
-  --led-secondary: #00f3ff;
-  --led-secondary-rgb: 0, 243, 255;
+  --led-secondary: #ffae00;
+  --led-secondary-rgb: 255, 174, 0;
 }
 
 body[data-led-theme="magenta"] {
   --led-primary: #ff00ea;
   --led-primary-rgb: 255, 0, 234;
-  --led-secondary: #00f3ff;
-  --led-secondary-rgb: 0, 243, 255;
+  --led-secondary: #00ff88;
+  --led-secondary-rgb: 0, 255, 136;
 }
 
 body[data-led-theme="amber"] {
@@ -1437,10 +1437,23 @@ html, body {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 10px;
-  padding: 10px 14px;
+  padding: 12px 16px;
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--text-secondary);
+}
+
+.kpoint-signature-badge {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--led-primary);
+  background: rgba(var(--led-primary-rgb), 0.12);
+  border: 1.5px solid var(--led-primary);
+  padding: 5px 14px;
+  border-radius: 99px;
+  box-shadow: 0 0 14px rgba(var(--led-primary-rgb), 0.35);
 }
 
 .toast-container {

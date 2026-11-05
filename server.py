@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-NEXUS LED // 5-CRYPTO LIVE TRADINGVIEW TERMINAL SERVER
+KPOINTCRYPTOGLANCE // 5-CRYPTO LIVE TRADINGVIEW TERMINAL SERVER
 - Serves the pitch-black LED crypto terminal (`index.html`, `styles.css`, `app.js`)
 - Provides direct backend endpoints for:
   1. `/api/quotes`: Live TradingView Crypto Scanner prices for BTC, ETH, SOL, HYPE, XRP & Top Risers
@@ -135,7 +135,7 @@ class NexusCryptoHandler(SimpleHTTPRequestHandler):
 def run_server():
     httpd = HTTPServer(("", PORT), NexusCryptoHandler)
     print("=" * 76)
-    print("  NEXUS LED // 5-CRYPTO LIVE TRADINGVIEW TERMINAL (BTC, ETH, SOL, HYPE, XRP)")
+    print("  KPOINTCRYPTOGLANCE // 5-CRYPTO LIVE TRADINGVIEW TERMINAL (BTC, ETH, SOL, HYPE, XRP)")
     print(f"  Local URL: http://localhost:{PORT}")
     print("  Live Price Feed: https://scanner.tradingview.com/crypto/scan")
     print("=" * 76)

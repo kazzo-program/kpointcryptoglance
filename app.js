@@ -1,8 +1,8 @@
 /**
- * NEXUS LED // 5-CRYPTO LIVE TRADINGVIEW TERMINAL
+ * KPOINTCRYPTOGLANCE // 5-CRYPTO LIVE TRADINGVIEW TERMINAL
  * - Dedicated Sections for the 5 Cryptocurrencies: BTC, ETH, SOL, HYPE, XRP
  * - Direct Live Prices from TradingView (`scanner.tradingview.com/crypto/scan`) + Official TradingView Widgets
- * - Pitch-Black Interface with a Synchronized 3.0-Second Glowing LED Outline & Web Audio Synthesizer Beep
+ * - Pitch-Black Interface with a Synchronized 3.0-Second Glowing LED Outline
  * - Live Crypto News Sidebar (Updating Directly from CryptoCompare, CoinDesk, CoinTelegraph & Decrypt Feeds)
  * - Top 5 Highest Rising Cryptocurrencies of the Week (7D), Month (30D), and Year (1Y)
  */
@@ -337,62 +337,11 @@
   let NEWS_SEARCH_QUERY = "";
 
   // =========================================================================
-  // 4. 3-SECOND SYNCHRONIZED LED GLOW & WEB AUDIO BEEP ENGINE
+  // 4. 3-SECOND SYNCHRONIZED LED GLOW ENGINE
   //    Pulses the entire pitch-black LED outline every 3.0 seconds!
   // =========================================================================
 
-  let AUDIO_BEEP_ENABLED = true;
-  let audioCtx = null;
-  let pulseTimerMs = 3000;
   const PULSE_INTERVAL_MS = 3000;
-
-  function ensureAudioContext() {
-    if (!audioCtx) {
-      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-      if (AudioContextClass) {
-        audioCtx = new AudioContextClass();
-      }
-    }
-    if (audioCtx && audioCtx.state === "suspended") {
-      audioCtx.resume().catch(() => {});
-    }
-  }
-
-  // Unlock Web Audio on first user interaction so the 3-second beep plays cleanly
-  ["click", "keydown", "pointerdown"].forEach(evtName => {
-    window.addEventListener(evtName, () => {
-      ensureAudioContext();
-    }, { once: false, passive: true });
-  });
-
-  function playLedCyberBeep() {
-    if (!AUDIO_BEEP_ENABLED) return;
-    try {
-      ensureAudioContext();
-      if (!audioCtx || audioCtx.state !== "running") return;
-
-      const now = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-
-      // Subtle futuristic two-harmonic LED sonar beep
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(1046.50, now); // C6 crisp LED ping
-      osc.frequency.exponentialRampToValueAtTime(1318.51, now + 0.085); // E6 harmonic lift
-
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.055, now + 0.015);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
-
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      osc.start(now);
-      osc.stop(now + 0.17);
-    } catch (e) {
-      // Ignore if browser blocks autoplay before first click
-    }
-  }
 
   function triggerThreeSecondLedPulse() {
     const chassis = document.getElementById("led-chassis-frame");
@@ -402,7 +351,6 @@
         chassis.classList.remove("led-pulse-active");
       }, 620);
     }
-    playLedCyberBeep();
   }
 
   function startThreeSecondLedEngine() {
@@ -428,27 +376,8 @@
     }, stepMs);
   }
 
-  window.toggleAudioBeep = function () {
-    ensureAudioContext();
-    AUDIO_BEEP_ENABLED = !AUDIO_BEEP_ENABLED;
-    const btn = document.getElementById("audio-beep-toggle-btn");
-    const icon = document.getElementById("sound-icon");
-    const label = document.getElementById("sound-btn-label");
-
-    if (btn) btn.classList.toggle("active", AUDIO_BEEP_ENABLED);
-    if (icon) icon.textContent = AUDIO_BEEP_ENABLED ? "🔊" : "🔇";
-    if (label) label.textContent = `3s Beep Sound: ${AUDIO_BEEP_ENABLED ? "ON" : "MUTED"}`;
-
-    if (AUDIO_BEEP_ENABLED) {
-      playLedCyberBeep();
-      showToast("3-Second LED Beep & Glow Audio Enabled");
-    } else {
-      showToast("3-Second LED Audio Beep Muted (Visual LED Glow Remains Active)");
-    }
-  };
-
   window.setLedColorTheme = function (themeName, btnEl) {
-    if (themeName === "cyan") {
+    if (themeName === "emerald") {
       document.body.removeAttribute("data-led-theme");
     } else {
       document.body.setAttribute("data-led-theme", themeName);
