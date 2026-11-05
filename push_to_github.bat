@@ -1,21 +1,21 @@
 @echo off
-title KPOINT COF - Push to GitHub (kpointcof)
+title KPOINT CRYPTO GLANCE - Push to GitHub (kpointcryptoglance)
 echo =========================================================================
-echo   KPOINT COF // WHITE ^& GREY MACRO NEWS TERMINAL - GITHUB SYNC
-echo   Repository: https://github.com/kazzo-program/kpointcof
+echo   KPOINT CRYPTO GLANCE // 5-CRYPTO LED TRADINGVIEW TERMINAL - GITHUB SYNC
+echo   Repository: https://github.com/kazzo-program/kpointcryptoglance
 echo =========================================================================
 echo.
 cd /d "%~dp0"
 
-git remote remove kpointcof 2>nul
-git remote add kpointcof https://github.com/kazzo-program/kpointcof.git
+git remote remove kpointcryptoglance 2>nul
+git remote add kpointcryptoglance https://github.com/kazzo-program/kpointcryptoglance.git
 
-echo Pushing to kpointcof...
-git push -u kpointcof main --force
+echo Pushing to kpointcryptoglance...
+git push -u kpointcryptoglance main --force
 if %ERRORLEVEL% equ 0 (
-    echo [OK] Successfully synced to kpointcof on GitHub!
+    echo [OK] Successfully synced to kpointcryptoglance on GitHub!
 ) else (
-    echo [ERROR] Failed to push to kpointcof. Make sure https://github.com/kazzo-program/kpointcof exists.
+    echo [ERROR] Failed to push to kpointcryptoglance. Make sure https://github.com/kazzo-program/kpointcryptoglance exists.
 )
 echo.
 pause

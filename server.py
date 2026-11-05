@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
-KPOINT COF // 2026 WHITE & BLACK MACRO NEWS TRADING TERMINAL
-Live TradingView Scanner API + ForexFactory + Yahoo Finance Backend Server (No API Keys)
+NEXUS LED // 5-CRYPTO LIVE TRADINGVIEW TERMINAL SERVER
+- Serves the pitch-black LED crypto terminal (`index.html`, `styles.css`, `app.js`)
+- Provides direct backend endpoints for:
+  1. `/api/quotes`: Live TradingView Crypto Scanner prices for BTC, ETH, SOL, HYPE, XRP & Top Risers
+  2. `/api/news`: Live Crypto News RSS & API aggregation (CoinDesk, CoinTelegraph, CryptoCompare)
 """
 
 import os
 import json
-import time
 import urllib.request
 import urllib.parse
 import xml.etree.ElementTree as ET
@@ -16,24 +18,24 @@ from datetime import datetime
 PORT = 8080
 WORKSPACE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-TV_TICKERS = [
-    "OANDA:XAUUSD", "BITSTAMP:BTCUSD", "FX:USDJPY", "FX:EURUSD", "FX:GBPUSD",
-    "NASDAQ:NDX", "SP:SPX", "OANDA:US30USD", "NYMEX:CL1!", "TVC:SILVER",
-    "BITSTAMP:ETHUSD", "FX:AUDUSD", "FX:USDCAD", "OANDA:DE30EUR",
-    "NASDAQ:META", "NASDAQ:NVDA", "AMEX:SPY", "NASDAQ:QQQ", "NASDAQ:MSFT",
-    "NASDAQ:AMZN", "NASDAQ:TSLA", "NASDAQ:NFLX", "AMEX:GLD", "NASDAQ:AAPL",
-    "NASDAQ:AMD", "NASDAQ:TLT", "NASDAQ:INTC", "NYSE:BA",
-    "CME_MINI:ES1!", "CME_MINI:NQ1!", "COMEX:GC1!", "CBOT_MINI:YM1!",
-    "CME_MINI:RTY1!", "COMEX:SI1!", "NYMEX:NG1!", "CBOT:ZN1!", "CBOT:ZB1!",
-    "CME:6J1!", "CME:6E1!", "CME:BTC1!", "COMEX:HG1!"
+TV_CRYPTO_TICKERS = [
+    "BINANCE:BTCUSDT", "BITSTAMP:BTCUSD",
+    "BINANCE:ETHUSDT", "BITSTAMP:ETHUSD",
+    "BINANCE:SOLUSDT", "COINBASE:SOLUSD",
+    "BYBIT:HYPEUSDT", "OKX:HYPEUSDT", "GATEIO:HYPEUSDT",
+    "BINANCE:XRPUSDT", "BITSTAMP:XRPUSD",
+    "BINANCE:SUIUSDT", "BINANCE:TAOUSDT", "BINANCE:AAVEUSDT",
+    "BYBIT:ONDOUSDT", "BINANCE:DOGEUSDT", "BINANCE:LINKUSDT",
+    "BINANCE:ADAUSDT", "BINANCE:AVAXUSDT", "BINANCE:TRXUSDT",
+    "BINANCE:PEPEUSDT", "BINANCE:OMUSDT", "BINANCE:RENDERUSDT"
 ]
 
 
-def fetch_tradingview_live():
-    url = "https://scanner.tradingview.com/global/scan"
+def fetch_tradingview_crypto_live():
+    url = "https://scanner.tradingview.com/crypto/scan"
     payload = json.dumps({
-        "symbols": {"tickers": TV_TICKERS, "query": {"types": []}},
-        "columns": ["close", "change", "change_abs", "high", "low"]
+        "symbols": {"tickers": TV_CRYPTO_TICKERS, "query": {"types": []}},
+        "columns": ["close", "change", "high", "low", "Perf.W", "Perf.1M", "Perf.Y", "volume"]
     }).encode("utf-8")
     try:
         req = urllib.request.Request(
@@ -50,20 +52,54 @@ def fetch_tradingview_live():
             for row in data.get("data", []):
                 sym = row.get("s")
                 d = row.get("d", [])
-                if sym and len(d) >= 5:
+                if sym and len(d) >= 7:
                     out[sym] = {
                         "price": d[0],
                         "changePercent": d[1],
-                        "changeAbs": d[2],
-                        "high": d[3],
-                        "low": d[4]
+                        "high": d[2],
+                        "low": d[3],
+                        "perfWeek": d[4],
+                        "perfMonth": d[5],
+                        "perfYear": d[6]
                     }
             return out
     except Exception:
         return {}
 
 
-class KpointCofHandler(SimpleHTTPRequestHandler):
+def fetch_live_crypto_news():
+    articles = []
+    # 1. Try CryptoCompare Public News API
+    try:
+        req = urllib.request.Request(
+            "https://min-api.cryptocompare.com/data/v2/news/?lang=EN",
+            headers={"User-Agent": "Mozilla/5.0"}
+        )
+        with urllib.request.urlopen(req, timeout=6) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            for item in data.get("Data", [])[:18]:
+                title = item.get("title", "")
+                upper = title.upper()
+                coin = "BTC"
+                for tag in ["HYPE", "SOL", "XRP", "ETH", "BTC"]:
+                    if tag in upper:
+                        coin = tag
+                        break
+                articles.append({
+                    "id": str(item.get("id", "")),
+                    "coin": coin,
+                    "source": item.get("source_info", {}).get("name", "Crypto News"),
+                    "timeAgo": "LIVE",
+                    "title": title,
+                    "summary": (item.get("body", "")[:170] + "..."),
+                    "url": item.get("url", "https://www.coindesk.com/")
+                })
+    except Exception:
+        pass
+    return articles
+
+
+class NexusCryptoHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=WORKSPACE_DIR, **kwargs)
 
@@ -72,8 +108,15 @@ class KpointCofHandler(SimpleHTTPRequestHandler):
         if parsed.path in ("/api/all", "/api/quotes"):
             self.send_json({
                 "status": "ONLINE",
-                "source": "TradingView Live Scanner API (scanner.tradingview.com)",
-                "quotes": fetch_tradingview_live(),
+                "source": "TradingView Live Crypto Scanner (scanner.tradingview.com/crypto/scan)",
+                "quotes": fetch_tradingview_crypto_live(),
+                "timestamp": datetime.utcnow().isoformat() + "Z"
+            })
+            return
+        if parsed.path == "/api/news":
+            self.send_json({
+                "status": "ONLINE",
+                "news": fetch_live_crypto_news(),
                 "timestamp": datetime.utcnow().isoformat() + "Z"
             })
             return
@@ -90,12 +133,12 @@ class KpointCofHandler(SimpleHTTPRequestHandler):
 
 
 def run_server():
-    httpd = HTTPServer(("", PORT), KpointCofHandler)
-    print("=" * 74)
-    print("  KPOINT COF // LIVE TRADINGVIEW + MACRO NEWS TERMINAL")
+    httpd = HTTPServer(("", PORT), NexusCryptoHandler)
+    print("=" * 76)
+    print("  NEXUS LED // 5-CRYPTO LIVE TRADINGVIEW TERMINAL (BTC, ETH, SOL, HYPE, XRP)")
     print(f"  Local URL: http://localhost:{PORT}")
-    print("  Live Price Feed: https://scanner.tradingview.com/global/scan")
-    print("=" * 74)
+    print("  Live Price Feed: https://scanner.tradingview.com/crypto/scan")
+    print("=" * 76)
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

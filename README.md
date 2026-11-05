@@ -1,37 +1,40 @@
-# KPOINT COF // White & Grey Macro News Trading Terminal (CFDs, Options & Futures)
+# NEXUS LED // 5-Crypto Live TradingView Terminal (`BTC` • `ETH` • `SOL` • `HYPE` • `XRP`)
 
-> **Crisp White & Grey Institutional Interface // 100% Financial News-Driven `BUY / SELL / HOLD` Advisories // Live Direct Feeds from Yahoo Finance & ForexFactory (Zero API Keys Required)**
+> **Pitch-Black Cyber LED Interface // 3.0-Second Synchronized LED Glow & Audio Beep // Direct Live TradingView Prices for BTC, ETH, SOL, HYPE & XRP // Live Crypto News Wire // Top 5 Highest Rising Cryptos (Week, Month & Year)**
 
 ---
 
 ## ⚡ Core Architecture & Features
 
-### 1. Crisp White & Grey Institutional Interface
-- Clean architectural **White & Cool Grey** aesthetic (`#ffffff`, `#f1f4f8`, `#e9eef4`, `#cbd5e1`, `#0f172a`) with high-contrast semantic **BUY** (`#047857`), **SELL** (`#b91c1c`), and **HOLD** (`#b45309`) advisory badges.
-- Includes a one-click **Slate / White Contrast Toggle** in the top header.
+### 1. Dedicated Sections for the 5 Core Cryptocurrencies (`BTC`, `ETH`, `SOL`, `HYPE`, `XRP`)
+- **Section 01 — Bitcoin (`BTC`)**: Live price & multi-timeframe metrics directly from `BINANCE:BTCUSDT` / `BITSTAMP:BTCUSD` on TradingView + embedded interactive TradingView chart.
+- **Section 02 — Ethereum (`ETH`)**: Live price & multi-timeframe metrics directly from `BINANCE:ETHUSDT` on TradingView + embedded interactive TradingView chart.
+- **Section 03 — Solana (`SOL`)**: Live price & multi-timeframe metrics directly from `BINANCE:SOLUSDT` on TradingView + embedded interactive TradingView chart.
+- **Section 04 — Hyperliquid (`HYPE`)**: Live price & multi-timeframe metrics directly from `BYBIT:HYPEUSDT` / `OKX:HYPEUSDT` on TradingView + embedded interactive TradingView chart.
+- **Section 05 — Ripple (`XRP`)**: Live price & multi-timeframe metrics directly from `BINANCE:XRPUSDT` on TradingView + embedded interactive TradingView chart.
 
-### 2. Macro Trading News Strategy (Zero API Keys Required)
-- Pulls live macroeconomic data (**US CPI**, **Core CPI**, **Non-Farm Payrolls NFP**, **FOMC Rate Decisions**, **GDP**, **Core PCE**, **PMI**, **EIA Crude Inventories**) and corporate earnings reports (**META**, **NVDA**, **MSFT**, **AMZN**, **TSLA**, **AAPL**, **INTC**, **BA**) directly from **ForexFactory** (`nfs.faireconomy.media/ff_calendar_thisweek.json`) and **Yahoo Finance** (`query1.finance.yahoo.com/v8/finance/chart` & RSS headlines) with **no API keys required**.
-- Every recommendation (`BUY`, `SELL`, or `HOLD`) is generated **solely from financial news reports** (for example: *META quarterly earnings beat & AI ad revenue surge -> BUY META Call Options & NAS100 CFD*; *Strong NFP jobs report -> BUY USDJPY & ES=F*; *Intel restructuring & margin miss report -> SELL / Buy PUT*).
-- Includes an interactive **Instant News Report → BUY / SELL / HOLD Advisory Simulator** where you can test any custom headline or click any live report from Yahoo Finance or ForexFactory.
+### 2. Pitch-Black Interface with 3-Second Glowing & Beeping LED Outline
+- Built on a pitch-black (`#000000`) chassis wrapped in a full perimeter **LED Outline Frame** with 4 corner LED nodes and 48 top/bottom LED diodes.
+- **Every 3.0 seconds**, the LED perimeter and all section borders burst with a synchronized neon glow (`led-pulse-active`) accompanied by a crisp **Web Audio API synthesizer beep** (with a one-click Mute/Unmute toggle and 4 selectable LED colors: *Cyber Cyan*, *Matrix Emerald*, *Neon Magenta*, and *Solar Amber*).
 
-### 3. Separate Dedicated Desks for CFDs, Options & Futures
-- **💱 CFDs Desk (14 Instruments)**: `XAUUSD` (Gold Spot CFD), `BTCUSD` (Bitcoin Spot CFD), `USDJPY` (FX CFD), `EURUSD`, `GBPUSD`, `NAS100`, `US500`, `US30`, `WTIUSD`, `XAGUSD`, `ETHUSD`, `AUDUSD`, `USDCAD`, `GER40`.
-- **🎯 Options Desk (14 Contracts)**: `META`, `NVDA`, `SPY`, `QQQ`, `MSFT`, `AMZN`, `TSLA`, `NFLX`, `GLD`, `AAPL`, `AMD`, `TLT`, `INTC`, `BA` — complete with Recommended Strike/Expiry, Call/Put type, Live Option Premium, Implied Volatility (IV%), Delta, and the exact Earnings/Macro News report driving the `BUY`, `SELL`, or `HOLD` call.
-- **📈 Futures Desk (14 Exchange Contracts)**: `ES=F` (E-Mini S&P 500), `NQ=F` (E-Mini Nasdaq-100), `GC=F` (COMEX Gold), `YM=F` (E-Mini Dow), `RTY=F` (E-Mini Russell 2000), `SI=F` (Silver), `CL=F` (WTI Crude Oil), `NG=F` (Natural Gas), `ZN=F` (10Y Treasury Note), `ZB=F` (30Y Treasury Bond), `6J=F` (Japanese Yen), `6E=F` (Euro FX), `BTC=F` (CME Bitcoin), `HG=F` (Copper).
+### 3. Live Crypto News Sidebar
+- Located on the right side of the terminal (`#live-crypto-news-sidebar`), pulling real-time crypto headlines directly from public crypto news feeds (**CryptoCompare News API**, **CoinDesk**, **CoinTelegraph**, **Decrypt**).
+- Includes instant one-click filter pills for `ALL`, `BTC`, `ETH`, `SOL`, `HYPE`, `XRP`, and `RISERS`, plus a live keyword search bar.
 
-### 4. Continuous Live Updating Prices (Never Out of Date)
-- **Direct Exchange WebSocket (`wss://stream.binance.com:9443`)**: Real-time tick streaming for `BTCUSD`, `ETHUSD`, `BTC=F`, and `XAUUSD`/`GC=F` (via `PAXGUSDT` 1:1 physical London Gold spot anchor).
-- **Direct Interbank FX API (`open.er-api.com`)**: Live spot exchange rates for `USDJPY`, `EURUSD`, `GBPUSD`, `AUDUSD`, `USDCAD`, `6J=F`, and `6E=F`.
-- **Direct Yahoo Finance v8 & Multi-Gateway Sync + Sub-Second Orderbook Tick Engine**: Keeps bid/ask spreads, option premiums, and futures prices updating continuously in real time with green/red flash animations.
+### 4. Top 5 Highest Rising Cryptocurrencies of the Week, Month & Year
+- Dedicated 3-column leaderboard (`#top-risers-section`) displaying:
+  - **🔥 Top 5 Rising — This Week (7D)** (`Perf.W`)
+  - **⚡ Top 5 Rising — This Month (30D)** (`Perf.1M`)
+  - **👑 Top 5 Rising — This Year (365D / 1Y)** (`Perf.Y`)
+- Dynamically sorted from live TradingView Crypto Scanner performance metrics and paired with the latest crypto news catalyst driving each coin's rally.
 
 ---
 
 ## 🚀 How to Run
 
-1. **Standalone Browser Mode**: Open [`index.html`](file:///c:/Users/kb90G/OneDrive/quanto2/index.html) directly in any browser or via GitHub Pages.
-2. **Local Python Proxy Server**:
+1. **Direct Browser Mode**: Open [`index.html`](file:///c:/Users/kb90G/OneDrive/quanto2/index.html) directly in any modern browser.
+2. **Local Python Server Mode**:
    ```powershell
    python server.py
    ```
-   Then open `http://localhost:8080`.
+   Then visit `http://localhost:8080`.

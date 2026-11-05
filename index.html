@@ -3,599 +3,364 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KPOINT COF — Live TradingView Prices + Macro News Terminal (CFDs • Options • Futures)</title>
-  <meta name="description" content="Next-Gen White & Black Macro Trading Terminal powered by real-time TradingView live prices (scanner.tradingview.com + TradingView Widgets), Yahoo Finance, and ForexFactory (No API Keys). Separate toggleable sections for CFDs, Options & Futures." />
+  <title>NEXUS LED // 5-Crypto Live TradingView Terminal (BTC • ETH • SOL • HYPE • XRP)</title>
+  <meta name="description" content="Pitch-Black Cyber LED Crypto Terminal featuring dedicated live TradingView price sections for BTC, ETH, SOL, HYPE, and XRP, 3-second synchronized LED pulse & audio beep, live Crypto News sidebar, and Top 5 Highest Rising Cryptocurrencies of the Week, Month, and Year." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 </head>
-<body class="wb-light">
+<body class="led-terminal-body">
 
-  <!-- OFFICIAL LIVE TRADINGVIEW TICKER TAPE EMBED -->
-  <div class="tv-official-tape-wrap">
-    <div class="tradingview-widget-container">
-      <div class="tradingview-widget-container__widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-      {
-        "symbols": [
-          { "proName": "OANDA:XAUUSD", "title": "XAUUSD (Gold CFD)" },
-          { "proName": "BITSTAMP:BTCUSD", "title": "BTCUSD (Bitcoin CFD)" },
-          { "proName": "FX:USDJPY", "title": "USDJPY (FX CFD)" },
-          { "proName": "FX:EURUSD", "title": "EURUSD (FX CFD)" },
-          { "proName": "NASDAQ:META", "title": "META" },
-          { "proName": "NASDAQ:NVDA", "title": "NVDA" },
-          { "proName": "AMEX:SPY", "title": "SPY" },
-          { "proName": "NASDAQ:QQQ", "title": "QQQ" },
-          { "proName": "NASDAQ:MSFT", "title": "MSFT" },
-          { "proName": "NASDAQ:AAPL", "title": "AAPL" },
-          { "proName": "CME_MINI:ES1!", "title": "ES1! (S&P Futures)" },
-          { "proName": "CME_MINI:NQ1!", "title": "NQ1! (Nasdaq Futures)" },
-          { "proName": "COMEX:GC1!", "title": "GC1! (Gold Futures)" },
-          { "proName": "NYMEX:CL1!", "title": "CL1! (Crude Futures)" }
-        ],
-        "showSymbolLogo": true,
-        "isTransparent": false,
-        "displayMode": "adaptive",
-        "colorTheme": "dark",
-        "locale": "en"
-      }
-      </script>
-    </div>
-  </div>
+  <!-- =====================================================================
+       OUTER PITCH-BLACK CHASSIS WITH 3-SECOND PULSING LED PERIMETER & NODES
+       ===================================================================== -->
+  <div class="led-chassis-frame" id="led-chassis-frame">
+    <!-- Corner & Perimeter LED Bulb Nodes -->
+    <div class="led-corner-bulb top-left"></div>
+    <div class="led-corner-bulb top-right"></div>
+    <div class="led-corner-bulb bottom-left"></div>
+    <div class="led-corner-bulb bottom-right"></div>
 
-  <!-- TOP JET-BLACK STREAMING RIBBON (POWERED BY LIVE TRADINGVIEW SCANNER API) -->
-  <div class="live-marquee-bar">
-    <div class="marquee-badge">
-      <span class="live-dot"></span>
-      <span>TRADINGVIEW LIVE API // 4s REAL-TIME POLL</span>
+    <!-- Top & Bottom Animated LED Light Strip -->
+    <div class="led-light-strip top-strip" id="led-top-strip">
+      <span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span>
+      <span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span>
+      <span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span>
+      <span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span>
+      <span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span>
+      <span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span>
     </div>
-    <div class="marquee-viewport">
-      <div class="marquee-track" id="live-ticker-ribbon">
-        <!-- Populated dynamically by app.js from scanner.tradingview.com -->
+
+    <!-- ===================================================================
+         OFFICIAL LIVE TRADINGVIEW TICKER TAPE (BTC, ETH, SOL, HYPE, XRP)
+         =================================================================== -->
+    <div class="tv-tape-bar">
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+        {
+          "symbols": [
+            { "proName": "BINANCE:BTCUSDT", "title": "BTC / USDT (TradingView Live)" },
+            { "proName": "BINANCE:ETHUSDT", "title": "ETH / USDT (TradingView Live)" },
+            { "proName": "BINANCE:SOLUSDT", "title": "SOL / USDT (TradingView Live)" },
+            { "proName": "BYBIT:HYPEUSDT", "title": "HYPE / USDT (Hyperliquid Live)" },
+            { "proName": "BINANCE:XRPUSDT", "title": "XRP / USDT (TradingView Live)" }
+          ],
+          "showSymbolLogo": true,
+          "isTransparent": true,
+          "displayMode": "adaptive",
+          "colorTheme": "dark",
+          "locale": "en"
+        }
+        </script>
       </div>
     </div>
-    <div class="marquee-clock" id="utc-clock-display">00:00:00 UTC</div>
-  </div>
 
-  <!-- ULTRA-MODERN WHITE & BLACK NAVIGATION HEADER -->
-  <header class="wb-header">
-    <div class="wb-header-container">
-      <!-- Brand Identity -->
-      <div class="wb-brand">
-        <div class="wb-logo-mark">
-          <span>COF</span>
+    <!-- ===================================================================
+         TOP COMMAND HEADER WITH 3-SECOND LED HEARTBEAT & AUDIO BEEP CONTROLS
+         =================================================================== -->
+    <header class="cyber-header led-box">
+      <div class="header-left">
+        <div class="brand-emblem" id="brand-emblem-pulse">
+          <span class="emblem-core">⚡</span>
+          <span class="emblem-ring"></span>
         </div>
-        <div class="wb-brand-copy">
-          <div class="wb-title-line">
-            <h1>KPOINT COF</h1>
-            <span class="wb-pill-black">TRADINGVIEW LIVE PRICES</span>
-            <span class="wb-pill-outline">NO API KEYS</span>
+        <div class="brand-titles">
+          <div class="brand-row">
+            <h1>NEXUS // 5-CRYPTO LED TERMINAL</h1>
+            <span class="led-badge-cyan">TRADINGVIEW DIRECT FEED</span>
+            <span class="led-badge-green" id="pulse-indicator-pill">
+              <span class="led-bulb-dot" id="pulse-bulb-dot"></span>
+              3.0s LED PULSE &amp; BEEP
+            </span>
           </div>
-          <p class="wb-subtitle">
-            100% Real-Time Prices from <strong>TradingView</strong> + Live <strong>ForexFactory</strong> (CPI • NFP • FOMC) &amp; <strong>Yahoo Finance</strong> News → <strong>BUY / SELL / HOLD</strong>
+          <p class="brand-subtitle">
+            Live Real-Time Prices Directly from <strong>TradingView (`scanner.tradingview.com`)</strong> for <strong>BTC • ETH • SOL • HYPE • XRP</strong> + Live Crypto News &amp; Top 5 Risers
           </p>
         </div>
       </div>
 
-      <!-- Right Action Bar -->
-      <div class="wb-header-actions">
-        <div class="wb-status-cluster">
-          <span class="wb-status-chip">
-            <span class="dot-green"></span>
-            TradingView Feed: <strong id="last-price-sync-label">CONNECTING...</strong>
-          </span>
-          <span class="wb-status-chip">
-            <span class="dot-green"></span>
-            ForexFactory / Yahoo: <strong>LIVE</strong>
-          </span>
+      <!-- 3-Second Pulse Countdown Bar & Audio Beep Synth Controls -->
+      <div class="header-right">
+        <div class="led-heartbeat-monitor">
+          <div class="hb-top-row">
+            <span class="hb-label">LED GLOW &amp; BEEP CYCLE:</span>
+            <span class="hb-timer" id="pulse-countdown-text">3.0s</span>
+          </div>
+          <div class="hb-progress-track">
+            <div class="hb-progress-fill" id="pulse-progress-fill"></div>
+          </div>
+          <div class="hb-sub-row">
+            <span id="tv-sync-status">TradingView API: LIVE STREAMING</span>
+            <span id="utc-clock">00:00:00 UTC</span>
+          </div>
         </div>
 
-        <button class="wb-btn-outline" onclick="toggleWhiteBlackPolarity()" id="polarity-btn" title="Invert White & Black Polarity">
-          <span>◐ White / Black Mode</span>
-        </button>
+        <div class="header-control-btns">
+          <button class="led-btn led-btn-sound active" id="audio-beep-toggle-btn" onclick="toggleAudioBeep()">
+            <span class="sound-icon" id="sound-icon">🔊</span>
+            <span id="sound-btn-label">3s Beep Sound: ON</span>
+          </button>
 
-        <button class="wb-btn-black" id="sync-all-btn" onclick="triggerLiveMacroSync()">
-          <span id="sync-spinner-icon">↻</span>
-          <span>Refresh TradingView Live Now</span>
-        </button>
+          <div class="led-color-picker" title="Switch LED Glow Color">
+            <button class="color-dot active" data-theme="cyan" onclick="setLedColorTheme('cyan', this)" style="--dot-color:#00f3ff;" title="Cyber Cyan LED"></button>
+            <button class="color-dot" data-theme="emerald" onclick="setLedColorTheme('emerald', this)" style="--dot-color:#00ff88;" title="Matrix Emerald LED"></button>
+            <button class="color-dot" data-theme="magenta" onclick="setLedColorTheme('magenta', this)" style="--dot-color:#ff00ea;" title="Neon Magenta LED"></button>
+            <button class="color-dot" data-theme="amber" onclick="setLedColorTheme('amber', this)" style="--dot-color:#ffae00;" title="Solar Amber LED"></button>
+          </div>
+
+          <button class="led-btn led-btn-sync" onclick="manualSyncAll()">
+            <span id="sync-icon">↻</span>
+            <span>Sync TradingView &amp; News</span>
+          </button>
+        </div>
       </div>
-    </div>
+    </header>
 
     <!-- ===================================================================
-         PROMINENT DESK SWITCHER + INTERACTIVE SECTION TOGGLE BAR
+         QUICK NAVIGATION BAR FOR THE 5 CRYPTO SECTIONS + RISERS + CHART
          =================================================================== -->
-    <div class="wb-desk-control-bar">
-      <div class="wb-desk-control-inner">
-
-        <!-- 1. Segmented Desk Selector -->
-        <div class="wb-segmented-group" role="tablist" aria-label="Trading Desks">
-          <button class="wb-seg-btn active" data-desk="ALL" onclick="selectDeskMode('ALL', this)">
-            <span class="seg-dot"></span>
-            <span>All Desks View</span>
-          </button>
-          <button class="wb-seg-btn" data-desk="CFDS" onclick="selectDeskMode('CFDS', this)">
-            <span>💱 CFDs Section</span>
-            <span class="seg-badge">XAUUSD • BTCUSD • USDJPY</span>
-          </button>
-          <button class="wb-seg-btn" data-desk="OPTIONS" onclick="selectDeskMode('OPTIONS', this)">
-            <span>🎯 Options Section</span>
-            <span class="seg-badge">META • NVDA • SPY</span>
-          </button>
-          <button class="wb-seg-btn" data-desk="FUTURES" onclick="selectDeskMode('FUTURES', this)">
-            <span>📈 Futures Section</span>
-            <span class="seg-badge">ES=F • NQ=F • GC=F</span>
-          </button>
-          <button class="wb-seg-btn" data-desk="NEWS" onclick="selectDeskMode('NEWS', this)">
-            <span>📰 Live CPI / NFP &amp; News</span>
-          </button>
-        </div>
-
-        <!-- 2. Individual ON/OFF Section Toggle Switches -->
-        <div class="wb-toggle-switches-bar" aria-label="Toggle Individual Sections On or Off">
-          <span class="toggle-bar-label">TOGGLE SECTIONS ON/OFF:</span>
-
-          <label class="wb-switch-pill" id="pill-toggle-cfds">
-            <input type="checkbox" id="chk-section-cfds" checked onchange="toggleSectionVisibility('cfds', this.checked)" />
-            <span class="wb-switch-slider"></span>
-            <span class="wb-switch-text">CFDs</span>
-          </label>
-
-          <label class="wb-switch-pill" id="pill-toggle-options">
-            <input type="checkbox" id="chk-section-options" checked onchange="toggleSectionVisibility('options', this.checked)" />
-            <span class="wb-switch-slider"></span>
-            <span class="wb-switch-text">Options</span>
-          </label>
-
-          <label class="wb-switch-pill" id="pill-toggle-futures">
-            <input type="checkbox" id="chk-section-futures" checked onchange="toggleSectionVisibility('futures', this.checked)" />
-            <span class="wb-switch-slider"></span>
-            <span class="wb-switch-text">Futures</span>
-          </label>
-
-          <label class="wb-switch-pill" id="pill-toggle-news">
-            <input type="checkbox" id="chk-section-news" checked onchange="toggleSectionVisibility('news', this.checked)" />
-            <span class="wb-switch-slider"></span>
-            <span class="wb-switch-text">Macro News</span>
-          </label>
-        </div>
-
+    <nav class="crypto-quick-nav led-box">
+      <div class="quick-nav-left">
+        <span class="nav-prefix">JUMP TO CRYPTO SECTION:</span>
+        <button class="crypto-nav-pill active" onclick="scrollToCryptoSection('ALL', this)">
+          <span>⚡ ALL 5 CRYPTOS</span>
+        </button>
+        <button class="crypto-nav-pill" onclick="scrollToCryptoSection('BTC', this)">
+          <span class="c-dot btc-dot"></span>
+          <span>1. BITCOIN (BTC)</span>
+          <strong class="nav-live-price" data-nav-price="BTC">$—</strong>
+        </button>
+        <button class="crypto-nav-pill" onclick="scrollToCryptoSection('ETH', this)">
+          <span class="c-dot eth-dot"></span>
+          <span>2. ETHEREUM (ETH)</span>
+          <strong class="nav-live-price" data-nav-price="ETH">$—</strong>
+        </button>
+        <button class="crypto-nav-pill" onclick="scrollToCryptoSection('SOL', this)">
+          <span class="c-dot sol-dot"></span>
+          <span>3. SOLANA (SOL)</span>
+          <strong class="nav-live-price" data-nav-price="SOL">$—</strong>
+        </button>
+        <button class="crypto-nav-pill" onclick="scrollToCryptoSection('HYPE', this)">
+          <span class="c-dot hype-dot"></span>
+          <span>4. HYPERLIQUID (HYPE)</span>
+          <strong class="nav-live-price" data-nav-price="HYPE">$—</strong>
+        </button>
+        <button class="crypto-nav-pill" onclick="scrollToCryptoSection('XRP', this)">
+          <span class="c-dot xrp-dot"></span>
+          <span>5. RIPPLE (XRP)</span>
+          <strong class="nav-live-price" data-nav-price="XRP">$—</strong>
+        </button>
       </div>
-    </div>
-  </header>
-
-  <!-- MAIN MODERN WORKSPACE -->
-  <main class="wb-main">
-
-    <!-- LIVE MACRO REGIME BENTO STRIP (CPI, NFP, FED RATE, XAUUSD, BTCUSD, USDJPY) -->
-    <section class="wb-bento-strip" aria-label="Macro Indicators">
-      <div class="wb-bento-mini">
-        <div class="mini-top">
-          <span class="mini-tag">FOREXFACTORY CPI</span>
-          <span class="mini-pill-black">INFLATION</span>
-        </div>
-        <div class="mini-value-row">
-          <span class="mini-big" id="macro-cpi-actual">2.6%</span>
-          <span class="mini-sub">Fcst 2.6% • Core 3.3%</span>
-        </div>
-        <div class="mini-foot">Controlled CPI → <strong class="txt-buy">BUY</strong> Gold &amp; Tech</div>
+      <div class="quick-nav-right">
+        <button class="crypto-nav-pill risers-jump-btn" onclick="document.getElementById('top-risers-section').scrollIntoView({behavior:'smooth'})">
+          <span>🚀 Top 5 Risers (Week • Month • Year)</span>
+        </button>
       </div>
-
-      <div class="wb-bento-mini">
-        <div class="mini-top">
-          <span class="mini-tag">FOREXFACTORY NFP</span>
-          <span class="mini-pill-black">JOBS REPORT</span>
-        </div>
-        <div class="mini-value-row">
-          <span class="mini-big" id="macro-nfp-actual">227K</span>
-          <span class="mini-sub">Fcst 202K • Unemp 4.2%</span>
-        </div>
-        <div class="mini-foot">Strong Labor → <strong class="txt-buy">BUY</strong> USDJPY &amp; ES=F</div>
-      </div>
-
-      <div class="wb-bento-mini">
-        <div class="mini-top">
-          <span class="mini-tag">FOMC RATE PATH</span>
-          <span class="mini-pill-black">CENTRAL BANK</span>
-        </div>
-        <div class="mini-value-row">
-          <span class="mini-big" id="macro-fed-actual">4.50%</span>
-          <span class="mini-sub">-25 bps Easing Cycle</span>
-        </div>
-        <div class="mini-foot">Liquidity Tailwind → <strong class="txt-buy">BUY</strong> BTCUSD &amp; NQ=F</div>
-      </div>
-
-      <div class="wb-bento-mini mini-highlight" onclick="loadTradingViewChart('OANDA:XAUUSD', 'XAUUSD — Gold Spot CFD')">
-        <div class="mini-top">
-          <span class="mini-tag">OANDA:XAUUSD • GOLD CFD</span>
-          <span class="wb-adv-pill adv-buy">▲ BUY</span>
-        </div>
-        <div class="mini-value-row">
-          <span class="mini-big" id="strip-price-XAUUSD" data-live-price="XAUUSD">$4,110.69</span>
-          <span class="mini-delta delta-up" id="strip-delta-XAUUSD" data-live-chg="XAUUSD">+1.24%</span>
-        </div>
-        <div class="mini-foot">Click for Live TradingView Chart</div>
-      </div>
-
-      <div class="wb-bento-mini mini-highlight" onclick="loadTradingViewChart('BITSTAMP:BTCUSD', 'BTCUSD — Bitcoin Spot CFD')">
-        <div class="mini-top">
-          <span class="mini-tag">BITSTAMP:BTCUSD • CFD</span>
-          <span class="wb-adv-pill adv-buy">▲ BUY</span>
-        </div>
-        <div class="mini-value-row">
-          <span class="mini-big" id="strip-price-BTCUSD" data-live-price="BTCUSD">$80,466.65</span>
-          <span class="mini-delta delta-up" id="strip-delta-BTCUSD" data-live-chg="BTCUSD">+0.03%</span>
-        </div>
-        <div class="mini-foot">Click for Live TradingView Chart</div>
-      </div>
-
-      <div class="wb-bento-mini mini-highlight" onclick="loadTradingViewChart('FX:USDJPY', 'USDJPY — FX Spot CFD')">
-        <div class="mini-top">
-          <span class="mini-tag">FX:USDJPY • FX CFD</span>
-          <span class="wb-adv-pill adv-buy">▲ BUY</span>
-        </div>
-        <div class="mini-value-row">
-          <span class="mini-big" id="strip-price-USDJPY" data-live-price="USDJPY">¥158.110</span>
-          <span class="mini-delta delta-down" id="strip-delta-USDJPY" data-live-chg="USDJPY">-0.19%</span>
-        </div>
-        <div class="mini-foot">Click for Live TradingView Chart</div>
-      </div>
-    </section>
+    </nav>
 
     <!-- ===================================================================
-         LIVE INTERACTIVE TRADINGVIEW REAL-TIME CHART + NEWS SIMULATOR SPLIT
+         MAIN WORKSPACE GRID:
+         LEFT/CENTER: 5 Dedicated Crypto Sections + Interactive TV Chart + Top 5 Risers
+         RIGHT SIDEBAR: Live Real-Time Crypto News Wire
          =================================================================== -->
-    <div class="wb-top-split-grid">
+    <div class="terminal-workspace-grid">
 
-      <!-- LEFT: LIVE TRADINGVIEW ADVANCED REAL-TIME CHART -->
-      <section class="wb-section-card wb-tv-chart-card">
-        <div class="wb-section-head" style="padding-bottom:12px; margin-bottom:12px;">
-          <div>
-            <div class="wb-eyebrow">
-              <span class="wb-index-badge">TV</span>
-              <span>REAL-TIME TRADINGVIEW TERMINAL FEED</span>
+      <!-- =================================================================
+           PRIMARY COLUMN: 5 CRYPTO SECTIONS + TOP 5 HIGHEST RISING CRYPTOS
+           ================================================================= -->
+      <main class="terminal-main-column">
+
+        <!-- 1. DEDICATED 5 CRYPTOCURRENCY SECTIONS (BTC, ETH, SOL, HYPE, XRP) -->
+        <section class="five-cryptos-master-section" id="five-cryptos-master-section">
+          <div class="section-banner-header">
+            <div>
+              <div class="section-eyebrow">
+                <span class="led-indicator-dot"></span>
+                <span>DIRECT TRADINGVIEW SCANNER API + EMBEDDED TRADINGVIEW CHARTS</span>
+              </div>
+              <h2>THE 5 CORE CRYPTOCURRENCY SECTIONS (BTC • ETH • SOL • HYPE • XRP)</h2>
             </div>
-            <h2 class="wb-section-title" id="tv-chart-active-title">OANDA:XAUUSD — Gold Spot CFD Live Chart</h2>
-          </div>
-          <div class="wb-sample-pills" style="margin-bottom:0;">
-            <button class="wb-chip" onclick="loadTradingViewChart('OANDA:XAUUSD', 'XAUUSD — Gold Spot CFD')">XAUUSD</button>
-            <button class="wb-chip" onclick="loadTradingViewChart('BITSTAMP:BTCUSD', 'BTCUSD — Bitcoin CFD')">BTCUSD</button>
-            <button class="wb-chip" onclick="loadTradingViewChart('FX:USDJPY', 'USDJPY — FX CFD')">USDJPY</button>
-            <button class="wb-chip" onclick="loadTradingViewChart('NASDAQ:META', 'META — Options Underlying')">META</button>
-            <button class="wb-chip" onclick="loadTradingViewChart('NASDAQ:NVDA', 'NVDA — Options Underlying')">NVDA</button>
-            <button class="wb-chip" onclick="loadTradingViewChart('CME_MINI:ES1!', 'ES1! — S&P 500 Futures')">ES1!</button>
-          </div>
-        </div>
-        <div id="tv_live_chart_container" style="height: 360px; width: 100%; border-radius: 12px; overflow: hidden;"></div>
-      </section>
-
-      <!-- RIGHT: SOLELY FINANCIAL NEWS-DRIVEN BUY / SELL / HOLD SIMULATOR -->
-      <section class="wb-section-card wb-analyzer-section" style="margin-bottom:0;">
-        <div class="wb-section-head" style="padding-bottom:12px; margin-bottom:14px;">
-          <div>
-            <div class="wb-eyebrow">
-              <span class="eyebrow-dot"></span>
-              <span>SOLELY FINANCIAL NEWS-DRIVEN DECISION ENGINE</span>
+            <div class="section-banner-meta">
+              <span class="meta-chip">Source: <code>scanner.tradingview.com/crypto/scan</code></span>
+              <span class="meta-chip" id="last-tv-tick-time">Syncing TradingView...</span>
             </div>
-            <h2 class="wb-section-title">Financial News Report → BUY / SELL / HOLD</h2>
-            <p class="wb-section-desc">
-              Advises <strong>BUY</strong>, <strong>SELL</strong>, or <strong>HOLD</strong> strictly from financial reports (e.g. if <strong>META</strong> earnings are good → advise <strong>BUY</strong>).
-            </p>
           </div>
-        </div>
 
-        <div class="wb-analyzer-controls">
-          <div class="wb-input-bar">
+          <!-- Container where the 5 dedicated Crypto Sections are rendered -->
+          <div class="five-crypto-sections-stack" id="five-crypto-sections-container">
+            <!-- Dynamically populated by app.js with dedicated TradingView sections for BTC, ETH, SOL, HYPE, XRP -->
+          </div>
+        </section>
+
+        <!-- 2. FULL-WIDTH MASTER INTERACTIVE TRADINGVIEW ADVANCED TERMINAL -->
+        <section class="master-tv-chart-section led-box" id="master-tv-chart-section">
+          <div class="master-chart-header">
+            <div>
+              <span class="section-eyebrow">INTERACTIVE TRADINGVIEW PRO CHART</span>
+              <h3 id="master-chart-title">BINANCE:BTCUSDT — Bitcoin / TetherUS Live TradingView Chart</h3>
+            </div>
+            <div class="master-chart-tabs">
+              <button class="tv-tab-btn active" onclick="switchMasterTradingViewChart('BINANCE:BTCUSDT', 'Bitcoin (BTC)', this)">BTC</button>
+              <button class="tv-tab-btn" onclick="switchMasterTradingViewChart('BINANCE:ETHUSDT', 'Ethereum (ETH)', this)">ETH</button>
+              <button class="tv-tab-btn" onclick="switchMasterTradingViewChart('BINANCE:SOLUSDT', 'Solana (SOL)', this)">SOL</button>
+              <button class="tv-tab-btn" onclick="switchMasterTradingViewChart('BYBIT:HYPEUSDT', 'Hyperliquid (HYPE)', this)">HYPE</button>
+              <button class="tv-tab-btn" onclick="switchMasterTradingViewChart('BINANCE:XRPUSDT', 'Ripple (XRP)', this)">XRP</button>
+            </div>
+          </div>
+          <div class="master-tv-widget-box" id="master_tv_chart_container"></div>
+        </section>
+
+        <!-- 3. TOP 5 HIGHEST RISING CRYPTOCURRENCIES OF THE WEEK, MONTH & YEAR -->
+        <section class="top-risers-master-section led-box" id="top-risers-section">
+          <div class="risers-header">
+            <div>
+              <div class="section-eyebrow">
+                <span class="led-indicator-dot"></span>
+                <span>LIVE GAINERS &amp; CRYPTO NEWS CATALYST TRACKER</span>
+              </div>
+              <h2>🚀 TOP 5 HIGHEST RISING CRYPTOCURRENCIES (WEEK • MONTH • YEAR)</h2>
+              <p class="risers-subtitle">
+                Updated live from <strong>TradingView Crypto Gainers</strong> (`Perf.W`, `Perf.1M`, `Perf.Y`), <strong>CoinGecko Market Movers</strong> &amp; <strong>Live Crypto News Catalysts</strong>
+              </p>
+            </div>
+
+            <div class="risers-controls">
+              <div class="risers-tab-group" role="tablist">
+                <button class="riser-tab-btn active" data-period="ALL" onclick="switchRiserViewMode('ALL', this)">All 3 Timeframes</button>
+                <button class="riser-tab-btn" data-period="WEEK" onclick="switchRiserViewMode('WEEK', this)">🔥 Top 5 of the Week (7D)</button>
+                <button class="riser-tab-btn" data-period="MONTH" onclick="switchRiserViewMode('MONTH', this)">⚡ Top 5 of the Month (30D)</button>
+                <button class="riser-tab-btn" data-period="YEAR" onclick="switchRiserViewMode('YEAR', this)">👑 Top 5 of the Year (1Y)</button>
+              </div>
+              <button class="led-btn led-btn-mini" onclick="fetchTopRisingCryptosLive(true)">
+                <span>↻ Refresh Live Risers</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3-Column Grid for Week, Month, and Year Top 5 Risers -->
+          <div class="risers-three-col-grid" id="risers-three-col-grid">
+            <!-- Column 1: Top 5 of the Week -->
+            <div class="riser-board-card led-subbox" id="riser-col-week">
+              <div class="riser-board-header week-accent">
+                <div class="rb-title-group">
+                  <span class="rb-badge">7-DAY GAINERS</span>
+                  <h3>TOP 5 RISING — THIS WEEK</h3>
+                </div>
+                <span class="rb-live-tag" id="week-risers-status">LIVE SYNC</span>
+              </div>
+              <div class="riser-list" id="risers-week-list">
+                <!-- Populated dynamically by app.js -->
+              </div>
+            </div>
+
+            <!-- Column 2: Top 5 of the Month -->
+            <div class="riser-board-card led-subbox" id="riser-col-month">
+              <div class="riser-board-header month-accent">
+                <div class="rb-title-group">
+                  <span class="rb-badge">30-DAY GAINERS</span>
+                  <h3>TOP 5 RISING — THIS MONTH</h3>
+                </div>
+                <span class="rb-live-tag" id="month-risers-status">LIVE SYNC</span>
+              </div>
+              <div class="riser-list" id="risers-month-list">
+                <!-- Populated dynamically by app.js -->
+              </div>
+            </div>
+
+            <!-- Column 3: Top 5 of the Year -->
+            <div class="riser-board-card led-subbox" id="riser-col-year">
+              <div class="riser-board-header year-accent">
+                <div class="rb-title-group">
+                  <span class="rb-badge">365-DAY / 1Y GAINERS</span>
+                  <h3>TOP 5 RISING — THIS YEAR</h3>
+                </div>
+                <span class="rb-live-tag" id="year-risers-status">LIVE SYNC</span>
+              </div>
+              <div class="riser-list" id="risers-year-list">
+                <!-- Populated dynamically by app.js -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- =================================================================
+           SIDEBAR: LIVE CRYPTO NEWS WIRE (UPDATING DIRECTLY FROM CRYPTO NEWS SITES)
+           ================================================================= -->
+      <aside class="terminal-news-sidebar led-box" id="live-crypto-news-sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-title-row">
+            <div class="live-radar-beacon">
+              <span class="radar-core"></span>
+              <span class="radar-wave"></span>
+            </div>
+            <div>
+              <h2>LIVE CRYPTO NEWS WIRE</h2>
+              <p class="sidebar-sub">Direct Real-Time Feeds: CoinDesk • CoinTelegraph • CryptoCompare • Decrypt</p>
+            </div>
+          </div>
+
+          <!-- Filter pills for the Live News Sidebar -->
+          <div class="news-filter-bar">
+            <button class="news-filter-pill active" onclick="filterCryptoNews('ALL', this)">ALL</button>
+            <button class="news-filter-pill" onclick="filterCryptoNews('BTC', this)">BTC</button>
+            <button class="news-filter-pill" onclick="filterCryptoNews('ETH', this)">ETH</button>
+            <button class="news-filter-pill" onclick="filterCryptoNews('SOL', this)">SOL</button>
+            <button class="news-filter-pill" onclick="filterCryptoNews('HYPE', this)">HYPE</button>
+            <button class="news-filter-pill" onclick="filterCryptoNews('XRP', this)">XRP</button>
+            <button class="news-filter-pill" onclick="filterCryptoNews('RISERS', this)">🚀 RISERS</button>
+          </div>
+
+          <div class="news-search-row">
             <input
               type="text"
-              id="custom-news-input"
-              class="wb-news-input"
-              value="META reports strong quarterly earnings beat; EPS up 35% YoY and raises full-year AI advertising revenue guidance"
-              placeholder="Paste or type any financial news report (META earnings, CPI, NFP)..."
+              id="crypto-news-search"
+              placeholder="Search live crypto headlines (e.g., BTC, HYPE, ETF, Solana)..."
+              oninput="searchCryptoNews(this.value)"
             />
-            <button class="wb-btn-black" onclick="evaluateCustomNewsHeadline()">
-              <span>⚡ Advise</span>
-            </button>
+            <button class="led-btn-icon" onclick="fetchLiveCryptoNewsFeeds(true)" title="Refresh Crypto News Now">↻</button>
           </div>
 
-          <div class="wb-sample-pills">
-            <button class="wb-chip" onclick="loadSampleNews('META reports strong quarterly earnings beat; EPS up 35% YoY and raises full-year AI advertising revenue guidance')">
-              META Earnings Beat
-            </button>
-            <button class="wb-chip" onclick="loadSampleNews('ForexFactory Alert: US CPI YoY cools to 2.4% below forecast; Federal Reserve rate cut odds surge')">
-              Cool US CPI Print
-            </button>
-            <button class="wb-chip" onclick="loadSampleNews('ForexFactory Alert: US Non-Farm Payrolls (NFP) jumps to 275K vs 195K expected; US yields climb')">
-              Hot NFP Jobs Beat
-            </button>
-            <button class="wb-chip" onclick="loadSampleNews('Intel (INTC) misses quarterly revenue estimates and takes $16.6B restructuring charge')">
-              INTC Earnings Miss
-            </button>
-            <button class="wb-chip" onclick="loadSampleNews('AAPL iPhone revenue matches consensus while Services hits record; market awaits next AI catalyst')">
-              AAPL Mixed Report
-            </button>
-          </div>
-
-          <div id="analyzer-result-box" class="wb-analyzer-output">
-            <!-- Populated dynamically by app.js -->
+          <div class="news-status-strip">
+            <span><span class="dot-online"></span> Feed Status: <strong id="news-feed-status-label">LIVE STREAMING</strong></span>
+            <span id="news-count-badge">0 Articles</span>
           </div>
         </div>
-      </section>
+
+        <!-- Scrollable Live Crypto News Feed List -->
+        <div class="sidebar-news-stream" id="crypto-news-stream">
+          <!-- Populated dynamically by app.js from live CryptoCompare / CoinDesk / CoinTelegraph APIs -->
+        </div>
+      </aside>
 
     </div>
 
-    <!-- ===================================================================
-         SECTION 1: CFDs DESK (XAUUSD, BTCUSD, USDJPY, FX, INDICES, OIL)
-         =================================================================== -->
-    <section id="desk-section-cfds" class="wb-desk-section">
-      <div class="wb-section-card">
-        <div class="wb-section-head">
-          <div>
-            <div class="wb-eyebrow">
-              <span class="wb-index-badge">01</span>
-              <span>DEDICATED CFDs SECTION • LIVE TRADINGVIEW PRICES (OANDA / BITSTAMP / FX)</span>
-            </div>
-            <h2 class="wb-section-title">CFDs Trading Desk — XAUUSD, BTCUSD, USDJPY &amp; Global Macros</h2>
-            <p class="wb-section-desc">
-              Live prices pulled directly from <strong>TradingView (`scanner.tradingview.com`)</strong> every 4 seconds. Click any card's <strong>[📈 Live TV Chart]</strong> button to inspect the instrument on TradingView.
-            </p>
-          </div>
+    <!-- Bottom Animated LED Light Strip -->
+    <div class="led-light-strip bottom-strip" id="led-bottom-strip">
+      <span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span>
+      <span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span>
+      <span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span>
+      <span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span>
+      <span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span>
+      <span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span><span class="led-diode"></span>
+    </div>
 
-          <div class="wb-desk-toolbar">
-            <div class="wb-filter-group">
-              <button class="wb-filter-btn active" onclick="filterSection('cfds', 'ALL', this)">All CFDs (14)</button>
-              <button class="wb-filter-btn" onclick="filterSection('cfds', 'BUY', this)">▲ BUY Only</button>
-              <button class="wb-filter-btn" onclick="filterSection('cfds', 'SELL', this)">▼ SELL Only</button>
-              <button class="wb-filter-btn" onclick="filterSection('cfds', 'HOLD', this)">◆ HOLD Only</button>
-            </div>
-
-            <div class="wb-view-Readout">
-              <input
-                type="search"
-                class="wb-search-input"
-                placeholder="Search CFD (XAUUSD, BTCUSD, USDJPY)..."
-                oninput="searchSection('cfds', this.value)"
-              />
-              <div class="wb-layout-toggle">
-                <button class="wb-layout-btn active" id="btn-layout-cfds-cards" onclick="setSectionLayout('cfds', 'cards')">Cards</button>
-                <button class="wb-layout-btn" id="btn-layout-cfds-table" onclick="setSectionLayout('cfds', 'table')">Matrix</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div id="cfds-cards-container" class="wb-cards-grid"></div>
-
-        <div id="cfds-table-container" class="wb-table-wrap" style="display:none;">
-          <table class="wb-table">
-            <thead>
-              <tr>
-                <th>CFD Instrument (TradingView Ticker)</th>
-                <th>Category</th>
-                <th>Live TradingView Price</th>
-                <th>24h Change</th>
-                <th>Day High / Low</th>
-                <th>News Advisory</th>
-                <th>Driving Financial / Macro News Report</th>
-                <th>Chart</th>
-              </tr>
-            </thead>
-            <tbody id="cfds-table-body"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================================================================
-         SECTION 2: OPTIONS DESK (META, NVDA, SPY, QQQ, TSLA, AAPL, INTC)
-         =================================================================== -->
-    <section id="desk-section-options" class="wb-desk-section">
-      <div class="wb-section-card">
-        <div class="wb-section-head">
-          <div>
-            <div class="wb-eyebrow">
-              <span class="wb-index-badge">02</span>
-              <span>DEDICATED OPTIONS SECTION • LIVE TRADINGVIEW EQUITY &amp; ETF QUOTES</span>
-            </div>
-            <h2 class="wb-section-title">Options Trading Desk — Driven Solely by Earnings &amp; Macro News Reports</h2>
-            <p class="wb-section-desc">
-              Live underlying stock prices pulled directly from <strong>TradingView (`NASDAQ` / `NYSE` / `AMEX`)</strong> with <strong>BUY / SELL / HOLD</strong> options advisories based strictly on financial news reports.
-            </p>
-          </div>
-
-          <div class="wb-desk-toolbar">
-            <div class="wb-filter-group">
-              <button class="wb-filter-btn active" onclick="filterSection('options', 'ALL', this)">All Options (14)</button>
-              <button class="wb-filter-btn" onclick="filterSection('options', 'BUY', this)">▲ BUY Calls</button>
-              <button class="wb-filter-btn" onclick="filterSection('options', 'SELL', this)">▼ SELL / Puts</button>
-              <button class="wb-filter-btn" onclick="filterSection('options', 'HOLD', this)">◆ HOLD / Neutral</button>
-            </div>
-
-            <div class="wb-view-Readout">
-              <input
-                type="search"
-                class="wb-search-input"
-                placeholder="Search Option (META, NVDA, SPY, TSLA)..."
-                oninput="searchSection('options', this.value)"
-              />
-              <div class="wb-layout-toggle">
-                <button class="wb-layout-btn active" id="btn-layout-options-cards" onclick="setSectionLayout('options', 'cards')">Cards</button>
-                <button class="wb-layout-btn" id="btn-layout-options-table" onclick="setSectionLayout('options', 'table')">Matrix</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div id="options-cards-container" class="wb-cards-grid"></div>
-
-        <div id="options-table-container" class="wb-table-wrap" style="display:none;">
-          <table class="wb-table">
-            <thead>
-              <tr>
-                <th>Underlying (TradingView Ticker)</th>
-                <th>Live TradingView Share Price</th>
-                <th>24h Move</th>
-                <th>Target Option Contract</th>
-                <th>Est. Option Premium</th>
-                <th>IV &amp; Delta</th>
-                <th>News Advisory</th>
-                <th>Financial News Report Rationale</th>
-              </tr>
-            </thead>
-            <tbody id="options-table-body"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================================================================
-         SECTION 3: FUTURES DESK (ES1!, NQ1!, GC1!, CL1!, ZN1!, 6J1!, BTC1!)
-         =================================================================== -->
-    <section id="desk-section-futures" class="wb-desk-section">
-      <div class="wb-section-card">
-        <div class="wb-section-head">
-          <div>
-            <div class="wb-eyebrow">
-              <span class="wb-index-badge">03</span>
-              <span>DEDICATED FUTURES SECTION • LIVE TRADINGVIEW CME / COMEX / NYMEX QUOTES</span>
-            </div>
-            <h2 class="wb-section-title">Futures Trading Desk — Index, Commodities, Treasury &amp; FX Futures</h2>
-            <p class="wb-section-desc">
-              Live exchange futures prices pulled directly from <strong>TradingView (`CME_MINI`, `COMEX`, `NYMEX`, `CBOT`)</strong> paired with 100% news-driven <strong>BUY / SELL / HOLD</strong> signals.
-            </p>
-          </div>
-
-          <div class="wb-desk-toolbar">
-            <div class="wb-filter-group">
-              <button class="wb-filter-btn active" onclick="filterSection('futures', 'ALL', this)">All Futures (14)</button>
-              <button class="wb-filter-btn" onclick="filterSection('futures', 'BUY', this)">▲ BUY Only</button>
-              <button class="wb-filter-btn" onclick="filterSection('futures', 'SELL', this)">▼ SELL Only</button>
-              <button class="wb-filter-btn" onclick="filterSection('futures', 'HOLD', this)">◆ HOLD Only</button>
-            </div>
-
-            <div class="wb-view-Readout">
-              <input
-                type="search"
-                class="wb-search-input"
-                placeholder="Search Futures (ES=F, NQ=F, GC=F, CL=F)..."
-                oninput="searchSection('futures', this.value)"
-              />
-              <div class="wb-layout-toggle">
-                <button class="wb-layout-btn active" id="btn-layout-futures-cards" onclick="setSectionLayout('futures', 'cards')">Cards</button>
-                <button class="wb-layout-btn" id="btn-layout-futures-table" onclick="setSectionLayout('futures', 'table')">Matrix</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div id="futures-cards-container" class="wb-cards-grid"></div>
-
-        <div id="futures-table-container" class="wb-table-wrap" style="display:none;">
-          <table class="wb-table">
-            <thead>
-              <tr>
-                <th>Futures Contract (TradingView Ticker)</th>
-                <th>Exchange &amp; Specs</th>
-                <th>Live TradingView Price</th>
-                <th>24h Change</th>
-                <th>Day High / Low</th>
-                <th>News Advisory</th>
-                <th>Macro News Report Catalyst</th>
-                <th>Chart</th>
-              </tr>
-            </thead>
-            <tbody id="futures-table-body"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================================================================
-         SECTION 4: LIVE FOREXFACTORY (CPI/NFP) & YAHOO FINANCE NEWS WIRE
-         =================================================================== -->
-    <section id="desk-section-news" class="wb-desk-section">
-      <div class="wb-dual-news-grid">
-
-        <div class="wb-section-card">
-          <div class="wb-section-head">
-            <div>
-              <div class="wb-eyebrow">
-                <span class="wb-index-badge">FF</span>
-                <span>FOREXFACTORY LIVE MACRO FEED • NO API KEY</span>
-              </div>
-              <h2 class="wb-section-title">CPI, NFP, FOMC &amp; High-Impact Releases</h2>
-              <p class="wb-section-desc">
-                Pulled direct from ForexFactory's public feed (`nfs.faireconomy.media`). Click any release to run it through the Signal Engine.
-              </p>
-            </div>
-            <div class="wb-filter-group">
-              <button class="wb-filter-btn active" onclick="filterCalendarImpact('ALL', this)">All</button>
-              <button class="wb-filter-btn" onclick="filterCalendarImpact('HIGH', this)">High Impact</button>
-              <button class="wb-filter-btn" onclick="filterCalendarImpact('USD', this)">USD</button>
-            </div>
-          </div>
-
-          <div class="wb-table-wrap">
-            <table class="wb-table">
-              <thead>
-                <tr>
-                  <th>Ccy / Release</th>
-                  <th>Impact</th>
-                  <th>Actual</th>
-                  <th>Forecast</th>
-                  <th>Prev</th>
-                  <th>Signal</th>
-                </tr>
-              </thead>
-              <tbody id="full-ff-calendar-tbody"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="wb-section-card">
-          <div class="wb-section-head">
-            <div>
-              <div class="wb-eyebrow">
-                <span class="wb-index-badge">YF</span>
-                <span>YAHOO FINANCE DIRECT RSS WIRE • NO API KEY</span>
-              </div>
-              <h2 class="wb-section-title">Live Earnings &amp; Market News Reports</h2>
-              <p class="wb-section-desc">
-                Real-time headlines from Yahoo Finance mapped automatically to <strong>BUY / SELL / HOLD</strong> desk actions.
-              </p>
-            </div>
-            <input
-              type="search"
-              class="wb-search-input"
-              placeholder="Filter news (META, CPI, Gold)..."
-              oninput="filterLiveNewsWire(this.value)"
-            />
-          </div>
-
-          <div id="full-yahoo-news-grid" class="wb-news-stack"></div>
-        </div>
-
-      </div>
-    </section>
-
-  </main>
-
-  <!-- SLEEK MONOCHROME FOOTER -->
-  <footer class="wb-footer">
-    <div class="wb-footer-inner">
+    <footer class="cyber-footer">
       <div>
-        <strong>KPOINT COF — NEXT-GEN WHITE &amp; BLACK MACRO NEWS TRADING TERMINAL</strong>
-        <p>100% Real-Time Prices from TradingView (`scanner.tradingview.com`) + Live Yahoo Finance &amp; ForexFactory Feeds • Zero API Keys Required</p>
+        <strong>NEXUS LED // 5-CRYPTO LIVE TRADINGVIEW TERMINAL</strong> — Real-Time Prices from TradingView (`scanner.tradingview.com`) + Live Crypto News &amp; Top 5 Risers
       </div>
-      <div class="wb-footer-pills">
-        <span class="wb-pill-outline">CFDs (XAUUSD • BTCUSD • USDJPY)</span>
-        <span class="wb-pill-outline">Options (META • NVDA • SPY)</span>
-        <span class="wb-pill-outline">Futures (ES=F • NQ=F • GC=F)</span>
+      <div>
+        <span>LED Pulse Interval: <strong>Every 3.0 Seconds</strong></span> •
+        <span>Assets: <strong>BTC • ETH • SOL • HYPE • XRP</strong></span>
       </div>
-    </div>
-  </footer>
+    </footer>
+  </div>
 
+  <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container"></div>
 
   <script src="app.js"></script>
